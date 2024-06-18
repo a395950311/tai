@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>价格计算器</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  .container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px;
+  }
+  h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  form {
+    margin-bottom: 20px;
+  }
+  .input-wrapper {
+    margin-bottom: 15px;
+  }
+  .input-wrapper label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  .input-wrapper input[type="checkbox"], 
+  .input-wrapper input[type="radio"] {
+    margin-right: 10px;
+  }
+  .input-wrapper input[type="number"] {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+  }
+  .long-hair-options, .full-corn-length-input {
+    margin-left: 20px;
+    margin-top: 10px;
+  }
+  #priceResult {
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #e0ffe0;
+  }
+  .btn-example {
+    display: inline-block;
+    margin-top: 10px;
+    background-color: #007bff;
+    color: white;
+    padding: 5px 10px;
+    text-decoration: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  .btn-example:hover {
+    background-color: #0056b3;
+  }
+  .note {
+    text-align: center;
+    margin-top: 20px;
+    display: none;
+  }
+  /* Modal styles */
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+  .modal-content {
+    margin: 15% auto;
+    padding: 20px;
+    width: 80%;
+    max-width: 800px;
+  }
+  .modal-content img {
+    width: 100%;
+  }
+  .close {
+    color: white;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  .close:hover, .close:focus {
+    color: #bbb;
+    text-decoration: none;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h2>选择选项来计算价格</h2>
+    
+    <form id="pricingForm">
+      <div class="input-wrapper">
+        <label>
+          <input type="checkbox" name="patch" value="patch"> 仅修剪（单选 勾选后其余选项不可选）
+        </label>
+        <a href="#" class="btn-example show-modal" data-target="patchModal">修剪示例图（点击查看）</a>
+        <label>
+          <input type="checkbox" name="patch" value="patch"> 需要贴片
+        </label>
+        <a href="#" class="btn-example show-modal" data-target="patchModal2">贴片示例图（点击查看长图）</a>
+      </div>
+      <div class="input-wrapper">
+        <label>
+          <input type="checkbox" name="corn" value="corn" checked disabled> 需要玉米须
+        </label>
+        <a href="#" class="btn-example show-modal" data-target="cornModal">玉米须示例图（点击查看）</a>
+        <div id="cornDetails">
+          <label>
+            <input type="radio" name="hairLength" value="short" id="shortHair"> 短发
+          </label>
+          <label>
+            <input type="radio" name="hairLength" value="long"> 长发
+          </label>
+          <div class="long-hair-options">
+            <label>
+              <input type="radio" name="cornType" value="partial"> 造型部分玉米须
+            </label>
+            <label>
+              <input type="radio" name="cornType" value="full"> 全头玉米须（必须输入头发的长度）
+            </label>
+            <div class="full-corn-length-input" style="display: none;">
+              <label>头发长度（数字）：<input type="number" name="fullCornHairLength" min="1" step="1"></label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="input-wrapper">
+        <label>
+          <input type="checkbox" name="flip" value="flip"> 需要造型（反翘、波浪、内扣等）
+        </label>
+        <div id="flipDetails" style="display: none;">
+          <label>
+            <input type="radio" name="flipType" value="partial"> 少量造型
+          </label>
+          <label>
+            <input type="radio" name="flipType" value="full"> 大量造型
+          </label>
+          <a href="#" class="btn-example show-flip-partial-modal" data-target="flipPartialModal">少量造型示例图（点击查看）</a>
+          <a href="#" class="btn-example show-flip-full-modal" data-target="flipFullModal">大量造型示例图（点击查看）</a>
+        </div>
+      </div>
+      <div class="input-wrapper">
+        <label>
+          <input type="checkbox" name="seam" value="seam"> 需要中缝
+        </label>
+<a href="#" class="btn-example show-seam-modal" data-target="seamModal">中缝示例图（点击查看长图）</a>
+      </div>
+    </form>
+
+    <div id="priceResult">价格：¥ 80</div>
+    <p class="note">价格可能会有所波动，但相差不大。如果接受这个价格，请截图此页面给老师哦。</p>
+    <button id="resetBtn" class="btn-example">重置选项</button>
+  </div>
+
+  <!-- The Modal -->
+  <div id="patchModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <img src="仅修剪.jpg" alt="仅修剪示例图">
+    </div>
+  </div>
+  <div id="patchModal2" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <img src="贴片.jpg" alt="贴片示例图">
+    </div>
+  </div>
+  <div id="cornModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <img src="玉米须.jpg" alt="玉米须示例图">
+    </div>
+  </div>
+  <div id="flipPartialModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <img src="少量造型.jpg" alt="少量造型示例图">
+    </div>
+  </div>
+  <div id="flipFullModal" class="modal">
+<div class="modal-content">
+<span class="close">×</span>
+<img src="大量造型.jpg" alt="大量造型示例图">
+</div>
+  </div>
+<div id="seamModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <img src="中缝.jpg" alt="中缝示例图">
+  </div>
+</div>
+
+  <script>
+    const form = document.getElementById('pricingForm');
+    const resultDiv = document.getElementById('priceResult');
+    const closeModal = document.querySelectorAll('.close');
+    const resetBtn = document.getElementById('resetBtn');
+    const showPatchExampleLinks = document.querySelectorAll('.show-modal');
+    const patchModals = document.querySelectorAll('.modal');
+    const showFlipPartialModalLinks = document.querySelectorAll('.show-flip-partial-modal');
+    const showFlipFullModalLinks = document.querySelectorAll('.show-flip-full-modal');
+    const flipPartialModal = document.getElementById('flipPartialModal');
+    const flipFullModal = document.getElementById('flipFullModal');
+
+    showPatchExampleLinks.forEach((link, index) => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        patchModals[index].style.display = 'block';
+      });
+    });
+
+    showFlipPartialModalLinks.forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        flipPartialModal.style.display = 'block';
+      });
+    });
+
+    showFlipFullModalLinks.forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        flipFullModal.style.display = 'block';
+      });
+    });
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('pricingForm');
+    const patchCheckbox = form.querySelector('input[name="patch"]');
+    const allCheckboxes = form.querySelectorAll('input[type="checkbox"]');
+    const allRadioInputs = form.querySelectorAll('input[type="radio"]');
+
+
+const showSeamModalLink = document.querySelector('.show-seam-modal');
+const seamModal = document.getElementById('seamModal');
+showFlipPartialModalLinks.forEach(link => {
+  link.addEventListener('click', function(e) {
+    e.preventDefault();
+    flipPartialModal.style.display = 'block';
+  });
+});
+
+showSeamModalLink.addEventListener('click', function(e) {
+  e.preventDefault();
+  seamModal.style.display = 'block';
+});
+
+    // 添加“仅修剪”复选框状态改变的事件监听器
+    patchCheckbox.addEventListener('change', function() {
+      if (patchCheckbox.checked) {
+        // 如果“仅修剪”被选中，则禁用其他所有复选框和单选按钮
+        allCheckboxes.forEach(checkbox => {
+          if (checkbox !== patchCheckbox) {
+            checkbox.disabled = true;
+          }
+        });
+        allRadioInputs.forEach(radio => {
+          radio.disabled = true;
+        });
+      } else {
+        // 如果“仅修剪”未被选中，则启用其他所有复选框和单选按钮
+        allCheckboxes.forEach(checkbox => {
+          checkbox.disabled = false;
+        });
+        allRadioInputs.forEach(radio => {
+          radio.disabled = false;
+        });
+      }
+    });
+  });
+    document.addEventListener('DOMContentLoaded', function() {
+      form.querySelector('input[name="corn"]').disabled = true;
+      toggleCornDetails();
+      toggleFlipDetails();
+
+      form.addEventListener('change', function() {
+        calculatePrice();
+        toggleCornDetails();
+        toggleFlipDetails();
+      });
+
+      closeModal.forEach(close => {
+        close.addEventListener('click', function() {
+          patchModals.forEach(modal => {
+            modal.style.display = 'none';
+          });
+          flipPartialModal.style.display = 'none';
+          flipFullModal.style.display = 'none';
+        });
+      });
+
+      window.addEventListener('click', function(event) {
+        patchModals.forEach(modal => {
+          if (event.target === modal) {
+            modal.style.display = 'none';
+          }
+        });
+        if (event.target === flipPartialModal) {
+          flipPartialModal.style.display = 'none';
+        }
+        if (event.target === flipFullModal) {
+          flipFullModal.style.display = 'none';
+        }
+      });
+
+      resetBtn.addEventListener('click', function() {
+        resetForm();
+      });
+    });
+
+function toggleCornDetails() {
+  const cornCheckbox = form.querySelector('input[name="corn"]');
+  const hairLengthRadios = form.querySelectorAll('input[name="hairLength"]');
+  const cornTypeRadios = form.querySelectorAll('input[name="cornType"]');
+  const fullCornLengthInput = document.querySelector('.full-corn-length-input');
+
+  if (hairLengthRadios[1].checked && cornCheckbox.checked) {
+    // 如果选择了长发并且玉米须选项被选中，则显示二级选项
+    cornTypeRadios.forEach(radio => {
+      radio.parentNode.style.display = 'block'; // 显示部分玉米须和全部玉米须的选项
+    });
+    if (cornTypeRadios[1].checked) { // 如果选择了全头玉米须
+      fullCornLengthInput.style.display = 'block'; // 显示全头玉米须长度输入框
+    } else {
+      fullCornLengthInput.style.display = 'none'; // 隐藏全头玉米须长度输入框
+    }
+  } else {
+    // 否则，隐藏二级选项和长度输入框
+    cornTypeRadios.forEach(radio => {
+      radio.parentNode.style.display = 'none'; // 隐藏部分玉米须和全部玉米须的选项
+    });
+    fullCornLengthInput.style.display = 'none'; // 隐藏全头玉米须长度输入框
+  }
+}
+
+
+
+
+    function toggleFlipDetails() {
+      const flipDetails = document.getElementById('flipDetails');
+      const flipCheckbox = form.querySelector('input[name="flip"]');
+      const flipRadios = form.querySelectorAll('input[name="flipType"]');
+      
+      if (flipCheckbox.checked) {
+        flipDetails.style.display = 'block';
+        flipRadios.forEach(radio => {
+          radio.disabled = false;
+        });
+      } else {
+        flipDetails.style.display = 'none';
+        flipRadios.forEach(radio => {
+          radio.disabled = true;
+        });
+      }
+    }
+
+function resetForm() {
+  form.reset();
+  const allCheckboxes = form.querySelectorAll('input[type="checkbox"]');
+  const allRadioInputs = form.querySelectorAll('input[type="radio"]');
+  allCheckboxes.forEach(checkbox => {
+    checkbox.disabled = false;
+  });
+  allRadioInputs.forEach(radio => {
+    radio.disabled = false;
+  });
+  form.querySelector('input[name="corn"]').disabled = true;
+  toggleCornDetails();
+  toggleFlipDetails();
+  calculatePrice();
+}
+
+
+    function calculatePrice() {
+      let price = 80;
+  const patchCheckbox = form.querySelector('input[name="patch"]');
+  if (patchCheckbox.checked) {
+    resultDiv.textContent = `价格：¥ ${price}`;
+    document.querySelector('.note').style.display = 'block';
+    return; // 返回，结束函数执行
+  }
+      if (form.querySelector('input[name="patch"]:checked')) {
+        price += 40;
+      }
+
+      if (form.querySelector('input[name="corn"]').checked) {
+        const hairLength = form.querySelector('input[name="hairLength"]:checked');
+        if (hairLength && hairLength.value === 'long') {
+          const cornType = form.querySelector('input[name="cornType"]:checked');
+          if (cornType && cornType.value === 'full') {
+            const hairLengthInput = form.querySelector('input[name="fullCornHairLength"]');
+            if (hairLengthInput && hairLengthInput.value) {
+              const fullCornHairLength = parseInt(hairLengthInput.value);
+              if (!isNaN(fullCornHairLength)) {
+                if (fullCornHairLength >= 50 && fullCornHairLength < 60) {
+                  price += 60;
+                } else if (fullCornHairLength >= 60 && fullCornHairLength < 80) {
+                  price += 80;
+                } else if (fullCornHairLength >= 80 && fullCornHairLength < 100) {
+                  price += 100;
+                } else if (fullCornHairLength >= 100) {
+                  price += 120;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      if (form.querySelector('input[name="flip"]:checked')) {
+        const flipType = form.querySelector('input[name="flipType"]:checked');
+        if (flipType && flipType.value === 'partial') {
+          price += 40;
+        } else if (flipType && flipType.value === 'full') {
+          price += 100;
+        }
+      }
+
+      if (form.querySelector('input[name="seam"]:checked')) {
+        price += 40;
+      }
+
+      resultDiv.textContent = `价格：¥ ${price}`;
+      document.querySelector('.note').style.display = 'block';
+    }
+  </script>
+</body>
+</html>
