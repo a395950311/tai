@@ -5,6 +5,153 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>价格计算器</title>
 <style>
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.container {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 500px;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.button-container {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+form {
+  margin-bottom: 20px;
+}
+
+.input-wrapper {
+  margin-bottom: 15px;
+}
+
+.input-wrapper label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.input-wrapper input[type="checkbox"], 
+.input-wrapper input[type="radio"] {
+  margin-right: 10px;
+}
+
+.input-wrapper input[type="number"] {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
+.long-hair-options, .full-corn-length-input {
+  margin-left: 20px;
+  margin-top: 10px;
+}
+
+#priceResult {
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #e0ffe0;
+}
+
+.btn-example {
+  display: inline-block;
+  margin-top: 10px;
+  background-color: #007bff;
+  color: white;
+  padding: 5px 10px;
+  text-decoration: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-example:hover {
+  background-color: #0056b3;
+}
+
+.note {
+  text-align: center;
+  margin-top: 20px;
+  display: none;
+}
+
+/* Modal styles */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.modal-content {
+  margin: 15% auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  width: 80%;
+  max-width: 800px;
+  font-family: 'Arial', sans-serif;
+  color: #333;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+  text-align: center;
+}
+
+.modal-content img {
+  width: 100%;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+.close {
+  color: #333;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover, .close:focus {
+  color: #bbb;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.modal p {
+  font-size: 16px;
+  line-height: 1.5;
+  margin-top: 10px;
+}
+
+
   body {
     font-family: Arial, sans-serif;
     background-color: #f5f5f5;
@@ -22,6 +169,21 @@
     width: 100%;
     max-width: 500px;
   }
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.button-container {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+
   h2 {
     text-align: center;
     margin-bottom: 20px;
@@ -114,7 +276,13 @@
 </head>
 <body>
   <div class="container">
-    <h2>选择选项来计算价格</h2>
+<h2>选择选项来计算价格
+  <div class="button-container">
+    <button id="infoBtn" class="btn-example">信息</button>
+  </div>
+</h2>
+
+
     
     <form id="pricingForm">
       <div class="input-wrapper">
@@ -217,7 +385,12 @@
     <img src="中缝.jpg" alt="中缝示例图">
   </div>
 </div>
-
+<div id="infoModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <p>1.查看价格是否在预算内→2.(价格选项页面截图)(人设)和(使用时间)发给毛娘→3.最终报价支付定金→4.寄毛给毛娘或毛娘代买→5.耐心等待做好看成品→6.补尾款→7.发货。</p>
+  </div>
+</div>
   <script>
     const form = document.getElementById('pricingForm');
     const resultDiv = document.getElementById('priceResult');
@@ -260,6 +433,25 @@
 
 const showSeamModalLink = document.querySelector('.show-seam-modal');
 const seamModal = document.getElementById('seamModal');
+
+  const infoBtn = document.getElementById('infoBtn');
+  const infoModal = document.getElementById('infoModal');
+  const closeInfoModal = infoModal.querySelector('.close');
+
+  infoBtn.addEventListener('click', function() {
+    infoModal.style.display = 'block';
+  });
+
+  closeInfoModal.addEventListener('click', function() {
+    infoModal.style.display = 'none';
+  });
+
+  window.addEventListener('click', function(event) {
+    if (event.target === infoModal) {
+      infoModal.style.display = 'none';
+    }
+  });
+
 showFlipPartialModalLinks.forEach(link => {
   link.addEventListener('click', function(e) {
     e.preventDefault();
@@ -315,6 +507,8 @@ showSeamModalLink.addEventListener('click', function(e) {
           flipFullModal.style.display = 'none';
         });
       });
+
+
 
       window.addEventListener('click', function(event) {
         patchModals.forEach(modal => {
