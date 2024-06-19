@@ -142,6 +142,17 @@
     
     <form id="pricingForm">
       <div class="input-wrapper">
+<div class="input-wrapper">
+  <label for="monthSelect">请选择要使用的日期：</label>
+  <select id="monthSelect">
+    <!-- 月份选项将由 JavaScript 动态生成 -->
+  </select>
+  <select id="daySelect">
+    <!-- 日期选项将由 JavaScript 动态生成 -->
+  </select>
+</div>
+
+
         <label>
           <input type="checkbox" name="patch" value="patch"> 仅修剪（单选 勾选后其余选项不可选）
         </label>
@@ -448,58 +459,162 @@ function resetForm() {
 }
 
 
-    function calculatePrice() {
-      let price = 80;
-  const patchCheckbox = form.querySelector('input[name="patch"]');
-  if (patchCheckbox.checked) {
-    resultDiv.textContent = `价格：¥ ${price}`;
-    document.querySelector('.note').style.display = 'block';
-    return; // 返回，结束函数执行
-  }
-      if (form.querySelector('input[name="patch"]:checked')) {
-        price += 40;
+  document.addEventListener("DOMContentLoaded", function() {
+    const monthSelect = document.getElementById("monthSelect");
+    const daySelect = document.getElementById("daySelect");
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = currentDate.getMonth() + 1; // 月份从0开始，需要加1
+    const currentDay = currentDate.getDate();
+
+const earliestSelectableDate = new Date(currentYear, currentMonth - 1, currentDay + 5);
+const nextMonth = currentMonth === 12 ? 1 : currentMonth + 1; // 处理12月跨年到1月的情况
+const nextMonthYear = currentMonth === 12 ? currentYear + 1 : currentYear; // 1月需要增加一年
+const nextMonthFifthDate = new Date(nextMonthYear, nextMonth - 1, 5);
+
+
+    // 初始化月份下拉框
+    const initMonthSelect = () => {
+      monthSelect.innerHTML = '<option value="">-- 选择月份 --</option>'; // 添加默认空白选项
+      for (let month = currentMonth; month <= 12; month++) {
+        const option = document.createElement("option");
+        option.value = month;
+        option.text = `${month}月`;
+        monthSelect.appendChild(option);
+      }
+    };
+
+    // 初始化日期下拉框
+    const initDaySelect = (selectedMonth) => {
+      daySelect.innerHTML = '<option value="">-- 选择日期 --</option>'; // 添加默认空白选项
+      let startDay = 1;
+      let daysInMonth;
+
+      // 计算所选月份的天数
+      if (selectedMonth) {
+        daysInMonth = new Date(currentYear, selectedMonth, 0).getDate();
+        if (selectedMonth == currentMonth) {
+          startDay = currentDay + 5;
+          if (startDay > daysInMonth) startDay = daysInMonth; // 防止超过当月天数
+        }
+      } else {
+        daysInMonth = 31; // 默认情况
       }
 
-      if (form.querySelector('input[name="corn"]').checked) {
-        const hairLength = form.querySelector('input[name="hairLength"]:checked');
-        if (hairLength && hairLength.value === 'long') {
-          const cornType = form.querySelector('input[name="cornType"]:checked');
-          if (cornType && cornType.value === 'full') {
-            const hairLengthInput = form.querySelector('input[name="fullCornHairLength"]');
-            if (hairLengthInput && hairLengthInput.value) {
-              const fullCornHairLength = parseInt(hairLengthInput.value);
-              if (!isNaN(fullCornHairLength)) {
-                if (fullCornHairLength >= 50 && fullCornHairLength < 60) {
-                  price += 60;
-                } else if (fullCornHairLength >= 60 && fullCornHairLength < 80) {
-                  price += 80;
-                } else if (fullCornHairLength >= 80 && fullCornHairLength < 100) {
-                  price += 100;
-                } else if (fullCornHairLength >= 100) {
-                  price += 120;
-                }
+      for (let day = startDay; day <= daysInMonth; day++) {
+        const option = document.createElement("option");
+        option.value = day;
+        option.text = `${day}日`;
+        daySelect.appendChild(option);
+      }
+    };
+
+    // 月份选择改变时更新日期选择框
+    monthSelect.addEventListener("change", (event) => {
+      const selectedMonth = parseInt(event.target.value);
+      initDaySelect(selectedMonth);
+    });
+
+    // 初始化月份和日期选择框
+    initMonthSelect();
+    initDaySelect(); // 默认情况下日期选择框为空白
+  });
+
+const currentDate = new Date();
+const currentYear = currentDate.getFullYear();
+const currentMonth = currentDate.getMonth() + 1;
+const currentDay = currentDate.getDate();
+const earliestSelectableDate = new Date(currentYear, currentMonth - 1, currentDay + 5);
+const nextMonth = currentMonth === 12 ? 1 : currentMonth + 1;
+const nextMonthYear = currentMonth === 12 ? currentYear + 1 : currentYear;
+const nextMonthFifthDate = new Date(nextMonthYear, nextMonth - 1, 5);
+
+function calculatePrice() {
+  let basePrice = 80;
+  let price = basePrice;
+  const patchCheckbox = form.querySelector('input[name="patch"]');
+
+  // 获取用户选择的日期
+  const selectedMonth = parseInt(document.getElementById('monthSelect').value);
+  const selectedDay = parseInt(document.getElementById('daySelect').value);
+
+  // 固定的日期区间和倍数
+  const dateMultipliers = [
+{ start: [earliestSelectableDate.getMonth() + 1, earliestSelectableDate.getDate()], end: [nextMonthFifthDate.getMonth() + 1, nextMonthFifthDate.getDate()], multiplier: 3 },
+    { start: [7, 6], end: [8, 5], multiplier: 3 },
+    { start: [8, 6], end: [9, 5], multiplier: 2 },
+
+    // 可以添加更多区间
+  ];
+
+  // 检查选择的日期是否在任何区间内
+  let selectedMultiplier = 1.0; // 默认倍数
+  for (const dateMultiplier of dateMultipliers) {
+    const [startMonth, startDay] = dateMultiplier.start;
+    const [endMonth, endDay] = dateMultiplier.end;
+    if (
+      (selectedMonth > startMonth || (selectedMonth === startMonth && selectedDay >= startDay)) &&
+      (selectedMonth < endMonth || (selectedMonth === endMonth && selectedDay <= endDay))
+    ) {
+      selectedMultiplier = dateMultiplier.multiplier;
+      break;
+    }
+  }
+
+  // 计算其他选项的价格
+  if (!patchCheckbox.checked) { // 仅修剪不改变价格
+    if (form.querySelector('input[name="corn"]').checked) {
+      const hairLength = form.querySelector('input[name="hairLength"]:checked');
+      if (hairLength && hairLength.value === 'long') {
+        const cornType = form.querySelector('input[name="cornType"]:checked');
+        if (cornType && cornType.value === 'full') {
+          const hairLengthInput = form.querySelector('input[name="fullCornHairLength"]');
+          if (hairLengthInput && hairLengthInput.value) {
+            const fullCornHairLength = parseInt(hairLengthInput.value);
+            if (!isNaN(fullCornHairLength)) {
+              if (fullCornHairLength >= 50 && fullCornHairLength < 60) {
+                price += 60;
+              } else if (fullCornHairLength >= 60 && fullCornHairLength < 80) {
+                price += 80;
+              } else if (fullCornHairLength >= 80 && fullCornHairLength < 100) {
+                price += 100;
+              } else if (fullCornHairLength >= 100) {
+                price += 120;
               }
             }
           }
         }
       }
-
-      if (form.querySelector('input[name="flip"]:checked')) {
-        const flipType = form.querySelector('input[name="flipType"]:checked');
-        if (flipType && flipType.value === 'partial') {
-          price += 40;
-        } else if (flipType && flipType.value === 'full') {
-          price += 100;
-        }
-      }
-
-      if (form.querySelector('input[name="seam"]:checked')) {
-        price += 40;
-      }
-
-      resultDiv.textContent = `价格：¥ ${price}`;
-      document.querySelector('.note').style.display = 'block';
     }
+
+    if (form.querySelector('input[name="flip"]:checked')) {
+      const flipType = form.querySelector('input[name="flipType"]:checked');
+      if (flipType && flipType.value === 'partial') {
+        price += 40;
+      } else if (flipType && flipType.value === 'full') {
+        price += 100;
+      }
+    }
+
+    if (form.querySelector('input[name="seam"]:checked')) {
+      price += 40;
+    }
+
+    // 勾选“贴片”要增加40元
+    if (form.querySelector('input[name="patch"]:checked')) {
+      price += 40;
+    }
+  }
+
+  // 计算最终价格，包括日期区间的倍数
+  const finalPrice = price * selectedMultiplier;
+
+  resultDiv.textContent = `总价格：${finalPrice}（手工费${price}元+加急费${finalPrice - price}元）`;
+  document.querySelector('.note').style.display = 'block';
+}
+
+
+
   </script>
 </body>
 </html>
