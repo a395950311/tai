@@ -97,6 +97,23 @@
     overflow: auto;
     background-color: rgba(0, 0, 0, 0.8);
   }
+.show-anti-gravity-modal {
+  display: inline-block;
+  background-color: #007bff;
+  color: white;
+  padding: 5px 10px;
+  text-decoration: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 13px; /* 设置字体大小为10px */
+  min-width: auto; /* 自适应字体大小 */
+  max-width: auto; /* 自适应字体大小 */
+}
+
+.show-anti-gravity-modal:hover {
+  background-color: #0056b3;
+}
+
   .modal-content {
     margin: 15% auto;
     padding: 10px; /* 调整padding */
@@ -220,6 +237,16 @@
           <a href="#" class="btn-example show-flip-full-modal example-btn" data-target="flipFullModal">示例图（点击查看）</a>
         </div>
       </div>
+<div class="input-wrapper" style="display: flex; align-items: center;">
+  <label>
+    <input type="checkbox" name="antiGravity" value="antiGravity"> 需要小反重力
+  </label>
+  <label style="margin-left: 10px;">
+    根数：
+    <input type="number" name="antiGravityRoot" min="0" max="99" step="1" style="width: 50px;">
+  </label>
+  <a href="#" class="btn-example show-anti-gravity-modal" style="margin-left: 10px;">示例图（点击查看）</a>
+</div>
       <div class="input-wrapper">
         <label>
           <input type="checkbox" name="seam" value="seam"> 需要中缝
@@ -229,7 +256,9 @@
     </form>
 
     <div id="priceResult">价格：¥ 80</div>
-    <p class="note">价格可能会有所波动，但相差不大。如果接受这个价格，请截图此页面给老师哦。</p>
+    <p class="note">价格可能会有所波动，但相差不大。如果接受这个价格，请截图此页面给老师哦。PS：大型反重力和万用改的毛胚需要咨询毛娘老师
+<a href="#" class="btn-example show-universal-hair-modal example-btn" data-target="universalHairModal">万用毛示例图（点击查看）</a>
+</p>
     <button id="resetBtn" class="btn-example">重置选项</button>
   </div>
 
@@ -270,6 +299,20 @@
     <img src="中缝.jpg" alt="中缝示例图">
   </div>
 </div>
+<div id="antiGravityModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <img src="反重力.jpg" alt="小反重力示例图">
+  </div>
+</div>
+<div id="universalHairModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <img src="万用毛.jpg" alt="万用毛示例图">
+  </div>
+</div>
+
+
 <div id="infoModal" class="modal">
   <div class="modal-content">
     <span class="close">&times;</span>
@@ -308,6 +351,29 @@
         flipFullModal.style.display = 'block';
       });
     });
+
+// JavaScript 中添加万用毛示例图链接的点击事件监听器
+document.addEventListener('DOMContentLoaded', function() {
+  const showUniversalHairModalLink = document.querySelector('.show-universal-hair-modal');
+  const universalHairModal = document.getElementById('universalHairModal');
+  const closeUniversalHairModal = universalHairModal.querySelector('.close');
+
+  showUniversalHairModalLink.addEventListener('click', function(e) {
+    e.preventDefault();
+    universalHairModal.style.display = 'block';
+  });
+
+  closeUniversalHairModal.addEventListener('click', function() {
+    universalHairModal.style.display = 'none';
+  });
+
+  window.addEventListener('click', function(event) {
+    if (event.target === universalHairModal) {
+      universalHairModal.style.display = 'none';
+    }
+  });
+});
+
 
   document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('pricingForm');
@@ -439,6 +505,40 @@ function toggleCornDetails() {
   }
 }
 
+
+document.addEventListener('DOMContentLoaded', function() {
+  const form = document.querySelector('form');
+
+  const antiGravityCheckbox = form.querySelector('input[name="antiGravity"]');
+  const antiGravityDetails = document.getElementById('antiGravityDetails');
+
+  antiGravityCheckbox.addEventListener('change', function() {
+    if (antiGravityCheckbox.checked) {
+      antiGravityDetails.style.display = 'inline';
+    } else {
+      antiGravityDetails.style.display = 'none';
+    }
+  });
+
+  const showAntiGravityModalLink = document.querySelector('.show-anti-gravity-modal');
+  const antiGravityModal = document.getElementById('antiGravityModal');
+  const closeAntiGravityModal = antiGravityModal.querySelector('.close');
+
+  showAntiGravityModalLink.addEventListener('click', function(e) {
+    e.preventDefault();
+    antiGravityModal.style.display = 'block';
+  });
+
+  closeAntiGravityModal.addEventListener('click', function() {
+    antiGravityModal.style.display = 'none';
+  });
+
+  window.addEventListener('click', function(event) {
+    if (event.target === antiGravityModal) {
+      antiGravityModal.style.display = 'none';
+    }
+  });
+});
 
 
 
@@ -617,6 +717,13 @@ function calculatePrice() {
     if (form.querySelector('input[name="seam"]:checked')) {
       price += 40;
     }
+if (form.querySelector('input[name="antiGravity"]:checked')) {
+  const antiGravityRootInput = form.querySelector('input[name="antiGravityRoot"]');
+  const antiGravityRoot = parseInt(antiGravityRootInput.value);
+  if (!isNaN(antiGravityRoot)) {
+    price += antiGravityRoot * 40; // 每根价格+40
+  }
+}
 
     // 勾选“贴片”要增加40元
     if (form.querySelector('input[name="patch"]:checked')) {
