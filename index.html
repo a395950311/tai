@@ -128,6 +128,26 @@
     text-decoration: none;
     cursor: pointer;
   }
+
+.example-btn {
+  display: inline-block;
+  background-color: #007bff;
+  color: white;
+  padding: 5px 10px;
+  text-decoration: none;
+  border-radius: 5px;
+  cursor: pointer;
+  /* 添加你想要的大小样式 */
+  width: 80px;
+  height: 24px;
+min-width: 140px;
+  font-size: 12px;
+}
+
+.example-btn:hover {
+  background-color: #0056b3;
+}
+
 </style>
 </head>
 <body>
@@ -155,18 +175,15 @@
 
         <label>
           <input type="checkbox" name="patch" value="patch"> 仅修剪（单选 勾选后其余选项不可选）
-        </label>
-        <a href="#" class="btn-example show-modal" data-target="patchModal">修剪示例图（点击查看）</a>
+        <a href="#" class="btn-example show-modal example-btn" data-target="patchModal">示例图（点击查看）</a>
         <label>
           <input type="checkbox" name="patch" value="patch"> 需要贴片
-        </label>
-        <a href="#" class="btn-example show-modal" data-target="patchModal2">贴片示例图（点击查看长图）</a>
+        <a href="#" class="btn-example show-modal example-btn" data-target="patchModal2">示例图（点击查看长图）</a>
       </div>
       <div class="input-wrapper">
         <label>
           <input type="checkbox" name="corn" value="corn" checked disabled> 需要玉米须
-        </label>
-        <a href="#" class="btn-example show-modal" data-target="cornModal">玉米须示例图（点击查看）</a>
+        <a href="#" class="btn-example show-modal example-btn" data-target="cornModal">示例图（点击查看）</a>
         <div id="cornDetails">
           <label>
             <input type="radio" name="hairLength" value="short" id="shortHair"> 短发
@@ -194,19 +211,18 @@
         <div id="flipDetails" style="display: none;">
           <label>
             <input type="radio" name="flipType" value="partial"> 少量造型
+          <a href="#" class="btn-example show-flip-partial-modal example-btn" data-target="flipPartialModal">示例图（点击查看）</a>
           </label>
           <label>
             <input type="radio" name="flipType" value="full"> 大量造型
-          </label>
-          <a href="#" class="btn-example show-flip-partial-modal" data-target="flipPartialModal">少量造型示例图（点击查看）</a>
-          <a href="#" class="btn-example show-flip-full-modal" data-target="flipFullModal">大量造型示例图（点击查看）</a>
+          <a href="#" class="btn-example show-flip-full-modal example-btn" data-target="flipFullModal">示例图（点击查看）</a>
         </div>
       </div>
       <div class="input-wrapper">
         <label>
           <input type="checkbox" name="seam" value="seam"> 需要中缝
+<a href="#" class="btn-example show-seam-modal example-btn" data-target="seamModal">示例图（点击查看长图）</a>
         </label>
-<a href="#" class="btn-example show-seam-modal" data-target="seamModal">中缝示例图（点击查看长图）</a>
       </div>
     </form>
 
