@@ -193,7 +193,7 @@
       <div class="input-wrapper">
 <div class="input-wrapper">
 <label style="color: red;">
-  请选择使用日期：6月、7月、8月需加急 6月29号晚上9点接9月的排单 (QQ蹲单群:766269442)
+请选择使用日期：6月、7月、8月需加急 6月29号晚上9点接9月的排单 (QQ蹲单群:766269442)
 </label>
   <select id="monthSelect">
     <!-- 月份选项将由 JavaScript 动态生成 -->
@@ -232,7 +232,7 @@
       </div>
       <div class="input-wrapper">
         <label>
-        <input type="checkbox" name="patch" value="patch"> 需要贴片
+         <input type="checkbox" name="patch" value="patch"> 需要贴片
         <a href="#" class="btn-example show-modal example-btn" data-target="patchModal2">示例图（点击查看长图）</a>
       </div>
       <div class="input-wrapper">
@@ -254,8 +254,8 @@
     <input type="checkbox" name="antiGravity" value="antiGravity"> 需要小反重力
   </label>
   <label style="margin-left: 10px;">
-    根数：
-    <input type="number" name="antiGravityRoot" min="0" max="99" step="1" style="width: 50px;">
+    <input type="number" name="antiGravityRoot" min="0" max="99" step="1" style="width: 30px;">
+根
   </label>
   <a href="#" class="btn-example show-anti-gravity-modal" style="margin-left: 10px;">示例图（点击查看）</a>
 </div>
@@ -281,16 +281,16 @@
       <img src="仅修剪.jpg" alt="仅修剪示例图">
     </div>
   </div>
-  <div id="patchModal2" class="modal">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <img src="贴片.jpg" alt="贴片示例图">
-    </div>
-  </div>
   <div id="cornModal" class="modal">
     <div class="modal-content">
       <span class="close">&times;</span>
       <img src="玉米须.jpg" alt="玉米须示例图">
+    </div>
+  </div>
+  <div id="patchModal2" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <img src="贴片.jpg" alt="贴片示例图">
     </div>
   </div>
   <div id="flipPartialModal" class="modal">
@@ -328,7 +328,7 @@
 <div id="infoModal" class="modal">
   <div class="modal-content">
     <span class="close">&times;</span>
-    <p>1.查看价格是否在预算内→2.(价格选项页面截图)(人设)和(使用时间)发给毛娘→3.最终报价支付定金→4.寄毛给毛娘或毛娘代买→5.耐心等待做好看成品→6.补尾款→7.发货。</p>
+    <p>1.查看价格是否在预算内→2.(价格选项页面截图)(人设)和(毛胚图)发给毛娘→3.最终报价支付定金→4.寄毛给毛娘或毛娘代买→5.耐心等待做好看成品→6.补尾款→7.发货。</p>
   </div>
 </div>
   <script>
@@ -571,6 +571,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
       }
     }
+
 
 function resetForm() {
   form.reset();
