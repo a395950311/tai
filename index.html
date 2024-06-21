@@ -160,18 +160,26 @@
   }
 
     <style>
-        .container {
-            position: relative;
-        }
+ .button-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
-        .custom-btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            left: 10px;
-            font-size: 14px; /* 调整字体大小 */
-            white-space: normal;/* 防止换行 */
-        }
+.btn-example {
+  background-color: #007bff;
+  color: white;
+  padding: 5px 10px;
+  text-decoration: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.custom-btn {
+  font-size: 14px;
+  white-space: normal;
+}
 
 .example-btn {
   display: inline-block;
@@ -197,7 +205,6 @@
 <body>
   <div class="container">
 <h2>价格计算
-            <a href="自定义.html" class="btn-example custom-btn">毛娘自定义报价系统<br>（生成属于自己的链接）</a>
   <div class="button-container">
     <button id="infoBtn" class="btn-example">约毛流程</button>
   </div>
@@ -288,6 +295,7 @@
 <a href="#" class="btn-example show-universal-hair-modal example-btn" data-target="universalHairModal">万用毛示例图（点击查看）</a>
 </p>
     <button id="resetBtn" class="btn-example">重置选项</button>
+<a href="自定义.html" class="btn-example custom-btn">毛娘自定义报价系统（生成属于自己的链接）</a>
   </div>
 
   <!-- The Modal -->
