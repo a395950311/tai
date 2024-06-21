@@ -127,32 +127,31 @@
 function saveAndGenerateLink() {
     savePrices();
 
-    // 获取保存的参数
-    const savedParams = {
+    // 服务器 URL 和页面名称
+    const serverURL = 'https://xiangtaijiang.com/';
+    const pageName = 'another_page.html';
+
+    // 构建参数字符串
+    const params = new URLSearchParams({
         defaultPrice: localStorage.getItem('defaultPrice'),
         weavePrice: localStorage.getItem('weavePrice'),
         sewingPrice: localStorage.getItem('sewingPrice'),
         minorStylingPrice: localStorage.getItem('minorStylingPrice'),
         majorStylingPrice: localStorage.getItem('majorStylingPrice'),
         microGravityPrice: localStorage.getItem('microGravityPrice'),
-        lengthRanges: JSON.parse(localStorage.getItem('lengthRanges') || '[]'),
-        expediteRanges: JSON.parse(localStorage.getItem('expediteRanges') || '[]')
-    };
+        lengthRanges: localStorage.getItem('lengthRanges'),
+        expediteRanges: localStorage.getItem('expediteRanges')
+    });
 
-// 修改生成链接的方式为服务器 URL
-const serverURL = 'https://xiangtaijiang.com/';
-const pageName = 'another_page.html';
-const uniqueLink = `${serverURL}${pageName}?params=${encodeURIComponent(JSON.stringify(savedParams))}`;
-
-    // 弹窗显示本地文件链接
+    // 生成链接并弹窗显示
+    const uniqueLink = `${serverURL}${pageName}?${params.toString()}`;
     alert(`您的专属链接为：${uniqueLink}`);
 
-    // 将链接显示在页面上
+    // 在页面上显示链接和添加复制功能
     const linkDisplay = document.createElement('p');
     linkDisplay.textContent = `您的专属链接为：${uniqueLink}`;
     document.getElementById('savedPrices').appendChild(linkDisplay);
 
-    // 创建复制链接按钮
     const copyLinkButton = document.createElement('button');
     copyLinkButton.textContent = '复制链接';
     copyLinkButton.onclick = function() {
@@ -164,10 +163,8 @@ const uniqueLink = `${serverURL}${pageName}?params=${encodeURIComponent(JSON.str
         document.body.removeChild(dummyInput);
         alert('链接已复制到剪贴板！');
     };
-    // 将复制链接按钮添加到页面
     document.getElementById('savedPrices').appendChild(copyLinkButton);
 }
-
 
 
 
