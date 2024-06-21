@@ -131,21 +131,11 @@ function saveAndGenerateLink() {
     const serverURL = 'https://xiangtaijiang.com/';
     const pageName = 'another_page.html';
 
-    // 构建参数字符串
-    const params = new URLSearchParams({
-        defaultPrice: localStorage.getItem('defaultPrice'),
-        weavePrice: localStorage.getItem('weavePrice'),
-        sewingPrice: localStorage.getItem('sewingPrice'),
-        minorStylingPrice: localStorage.getItem('minorStylingPrice'),
-        majorStylingPrice: localStorage.getItem('majorStylingPrice'),
-        microGravityPrice: localStorage.getItem('microGravityPrice'),
-        lengthRanges: localStorage.getItem('lengthRanges'),
-        expediteRanges: localStorage.getItem('expediteRanges')
-    });
+    // 构建链接
+    const uniqueLink = `${serverURL}${pageName}`;
 
-    // 生成链接并弹窗显示
-    const uniqueLink = `${serverURL}${pageName}?${params.toString()}`;
-    alert(`您的专属链接为：${uniqueLink}`);
+    // 将链接保存在本地存储中
+    localStorage.setItem('uniqueLink', uniqueLink);
 
     // 在页面上显示链接和添加复制功能
     const linkDisplay = document.createElement('p');
@@ -165,6 +155,7 @@ function saveAndGenerateLink() {
     };
     document.getElementById('savedPrices').appendChild(copyLinkButton);
 }
+
 
 
 
