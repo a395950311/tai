@@ -584,6 +584,7 @@ function displayPrices() {
     };
 
     for (const [key, value] of Object.entries(prices)) {
+        console.log(`${key}: ${value}`); // 添加调试输出
         const priceElement = document.createElement('p');
         priceElement.textContent = `${key}: ${value}`;
         // 不要将元素添加到页面上
