@@ -386,6 +386,20 @@
     return urlParams.get(param);
   }
 
+function decodeAndParseQueryParam(paramName) {
+  const encodedValue = getQueryParam(paramName);
+  if (!encodedValue) {
+    return [];
+  }
+  try {
+    const decodedValue = decodeURIComponent(encodedValue);
+    return JSON.parse(decodedValue);
+  } catch (error) {
+    console.error(`Error parsing ${paramName}:`, error);
+    return [];
+  }
+}
+
   // 显示价格和范围的函数
   function displayPrices() {
     const defaultPrice = getQueryParam('defaultPrice');
