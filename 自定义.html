@@ -139,10 +139,9 @@ function saveAndGenerateLink() {
         expediteRanges: JSON.parse(localStorage.getItem('expediteRanges') || '[]')
     };
 
-// 修改生成链接的方式为服务器 URL
+    // 修改生成链接的方式为服务器 URL
 const serverURL = 'https://xiangtaijiang.com/';
-const pageName = 'another_page.html';
-const uniqueLink = `${serverURL}${pageName}?params=${encodeURIComponent(JSON.stringify(savedParams))}`;
+const uniqueLink = `${serverURL}path/to/your/another_page.html?params=${encodeURIComponent(JSON.stringify(savedParams))}`;
 
     // 弹窗显示本地文件链接
     alert(`您的专属链接为：${uniqueLink}`);
