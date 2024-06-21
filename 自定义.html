@@ -116,6 +116,7 @@
     
 <button type="button" onclick="saveAndGenerateLink()">保存并生成链接</button>
     <button type="button" onclick="displaySavedPrices()">显示保存结果</button>
+<img src="群.jpg" alt="图片描述"style="max-width: 100%; height: auto;">
   </form>
 
   <div id="savedPrices"></div>
@@ -138,6 +139,7 @@ function saveAndGenerateLink() {
         lengthRanges: JSON.parse(localStorage.getItem('lengthRanges') || '[]'),
         expediteRanges: JSON.parse(localStorage.getItem('expediteRanges') || '[]')
     };
+console.log('Saved Params:', savedParams); // 添加调试输出
 
     // 将复杂对象转换为 JSON 字符串并编码
     const encodedParams = {
@@ -145,6 +147,7 @@ function saveAndGenerateLink() {
         lengthRanges: encodeURIComponent(JSON.stringify(savedParams.lengthRanges)),
         expediteRanges: encodeURIComponent(JSON.stringify(savedParams.expediteRanges))
     };
+console.log('Encoded Params:', encodedParams); // 添加调试输出
 
     // 将参数编码成URL查询参数
     const params = new URLSearchParams(encodedParams);
