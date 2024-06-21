@@ -525,17 +525,42 @@ function toggleCornDetails() {
   }
 }
 
-    function displayPrices() {
-      const priceDisplay = document.getElementById('priceDisplay');
+document.addEventListener('DOMContentLoaded', function() {
+  const urlParams = new URLSearchParams(window.location.search);
+  
+  const params = {
+    defaultPrice: urlParams.get('defaultPrice'),
+    trimmingPrice: urlParams.get('trimmingPrice'),
+    cornrowPrice: urlParams.get('cornrowPrice'),
+    weavePrice: urlParams.get('weavePrice'),
+    sewingPrice: urlParams.get('sewingPrice'),
+    minorStylingPrice: urlParams.get('minorStylingPrice'),
+    majorStylingPrice: urlParams.get('majorStylingPrice'),
+    microGravityPrice: urlParams.get('microGravityPrice'),
+    lengthRanges: JSON.parse(urlParams.get('lengthRanges') || '[]'),
+    expediteRanges: JSON.parse(urlParams.get('expediteRanges') || '[]')
+  };
 
-      const defaultPrice = localStorage.getItem('defaultPrice');
-      const trimmingPrice = localStorage.getItem('trimmingPrice');
-      const cornrowPrice = localStorage.getItem('cornrowPrice');
-      const weavePrice = localStorage.getItem('weavePrice');
-      const sewingPrice = localStorage.getItem('sewingPrice');
-      const minorStylingPrice = localStorage.getItem('minorStylingPrice');
-      const majorStylingPrice = localStorage.getItem('majorStylingPrice');
-      const microGravityPrice = localStorage.getItem('microGravityPrice');
+  // 将参数存储到本地存储中
+  for (const key in params) {
+    localStorage.setItem(key, params[key]);
+  }
+
+  // 显示价格
+  displayPrices();
+});
+
+function displayPrices() {
+  const priceDisplay = document.getElementById('priceDisplay');
+
+  const defaultPrice = localStorage.getItem('defaultPrice');
+  const trimmingPrice = localStorage.getItem('trimmingPrice');
+  const cornrowPrice = localStorage.getItem('cornrowPrice');
+  const weavePrice = localStorage.getItem('weavePrice');
+  const sewingPrice = localStorage.getItem('sewingPrice');
+  const minorStylingPrice = localStorage.getItem('minorStylingPrice');
+  const majorStylingPrice = localStorage.getItem('majorStylingPrice');
+  const microGravityPrice = localStorage.getItem('microGravityPrice');
 
       const prices = {
         '默认价格': defaultPrice,
