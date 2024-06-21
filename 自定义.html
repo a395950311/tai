@@ -139,12 +139,20 @@ function saveAndGenerateLink() {
         expediteRanges: JSON.parse(localStorage.getItem('expediteRanges') || '[]')
     };
 
-// 修改生成链接的方式为服务器 URL
-const serverURL = 'https://xiangtaijiang.com/';
-const pageName = 'another_page.html';
-const uniqueLink = `${serverURL}${pageName}?params=${encodeURIComponent(JSON.stringify(savedParams))}`;
+    // 将复杂对象转换为 JSON 字符串并编码
+    const encodedParams = {
+        ...savedParams,
+        lengthRanges: encodeURIComponent(JSON.stringify(savedParams.lengthRanges)),
+        expediteRanges: encodeURIComponent(JSON.stringify(savedParams.expediteRanges))
+    };
 
-    // 弹窗显示本地文件链接
+    // 将参数编码成URL查询参数
+    const params = new URLSearchParams(encodedParams);
+    const serverURL = 'https://xiangtaijiang.com/';
+    const pageName = 'another_page.html';
+    const uniqueLink = `${serverURL}${pageName}?${params.toString()}`;
+
+    // 弹窗显示链接
     alert(`您的专属链接为：${uniqueLink}`);
 
     // 将链接显示在页面上
@@ -167,6 +175,8 @@ const uniqueLink = `${serverURL}${pageName}?params=${encodeURIComponent(JSON.str
     // 将复制链接按钮添加到页面
     document.getElementById('savedPrices').appendChild(copyLinkButton);
 }
+
+
 
 
 
