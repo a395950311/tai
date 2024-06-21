@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>翔太酱约毛价格计算</title>
 
+
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-RE9SN1R820"></script>
 <script>
@@ -158,6 +159,20 @@
     cursor: pointer;
   }
 
+    <style>
+        .container {
+            position: relative;
+        }
+
+        .custom-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            left: 10px;
+            font-size: 14px; /* 调整字体大小 */
+            white-space: normal;/* 防止换行 */
+        }
+
 .example-btn {
   display: inline-block;
   background-color: #007bff;
@@ -182,6 +197,7 @@
 <body>
   <div class="container">
 <h2>价格计算
+            <a href="自定义.html" class="btn-example custom-btn">毛娘自定义报价系统<br>（生成属于自己的链接）</a>
   <div class="button-container">
     <button id="infoBtn" class="btn-example">约毛流程</button>
   </div>
@@ -257,7 +273,7 @@
     <input type="number" name="antiGravityRoot" min="0" max="99" step="1" style="width: 30px;">
 根
   </label>
-  <a href="#" class="btn-example show-anti-gravity-modal" style="margin-left: 10px;">示例图</a>
+  <a href="#" class="btn-example show-anti-gravity-modal" style="margin-left: 10px;">示例图（点击查看）</a>
 </div>
       <div class="input-wrapper">
         <label>
@@ -363,6 +379,10 @@
         flipFullModal.style.display = 'block';
       });
     });
+
+
+
+
 
 // JavaScript 中添加万用毛示例图链接的点击事件监听器
 document.addEventListener('DOMContentLoaded', function() {
@@ -491,6 +511,9 @@ showSeamModalLink.addEventListener('click', function(e) {
         resetForm();
       });
     });
+
+
+
 
 function toggleCornDetails() {
   const cornCheckbox = form.querySelector('input[name="corn"]');
