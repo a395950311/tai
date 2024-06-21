@@ -526,43 +526,53 @@ function toggleCornDetails() {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-  const urlParams = new URLSearchParams(window.location.search);
+    // 从 URL 中获取参数
+    const urlParams = new URLSearchParams(window.location.search);
   
-  const params = {
-    defaultPrice: urlParams.get('defaultPrice'),
-    trimmingPrice: urlParams.get('trimmingPrice'),
-    cornrowPrice: urlParams.get('cornrowPrice'),
-    weavePrice: urlParams.get('weavePrice'),
-    sewingPrice: urlParams.get('sewingPrice'),
-    minorStylingPrice: urlParams.get('minorStylingPrice'),
-    majorStylingPrice: urlParams.get('majorStylingPrice'),
-    microGravityPrice: urlParams.get('microGravityPrice'),
-    lengthRanges: JSON.parse(urlParams.get('lengthRanges') || '[]'),
-    expediteRanges: JSON.parse(urlParams.get('expediteRanges') || '[]')
-  };
+    // 根据参数名称获取对应的值
+    const params = {
+        defaultPrice: urlParams.get('defaultPrice'),
+        trimmingPrice: urlParams.get('trimmingPrice'),
+        cornrowPrice: urlParams.get('cornrowPrice'),
+        weavePrice: urlParams.get('weavePrice'),
+        sewingPrice: urlParams.get('sewingPrice'),
+        minorStylingPrice: urlParams.get('minorStylingPrice'),
+        majorStylingPrice: urlParams.get('majorStylingPrice'),
+        microGravityPrice: urlParams.get('microGravityPrice'),
+        lengthRanges: JSON.parse(urlParams.get('lengthRanges') || '[]'),
+        expediteRanges: JSON.parse(urlParams.get('expediteRanges') || '[]')
+    };
 
-  // 将参数存储到本地存储中
-  for (const key in params) {
-    localStorage.setItem(key, params[key]);
-  }
+    // 将参数存储到本地存储中
+    for (const key in params) {
+        localStorage.setItem(key, params[key]);
+    }
 
-  // 显示价格
-  displayPrices();
+    // 调用显示价格的函数，但不在界面上显示获取到的参数
+    displayPrices();
 });
 
+// 获取 URL 中特定参数的值
+function getQueryParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+}
+
+// 在页面上显示价格
 function displayPrices() {
-  const priceDisplay = document.getElementById('priceDisplay');
+    const priceDisplay = document.getElementById('priceDisplay');
 
-  const defaultPrice = localStorage.getItem('defaultPrice');
-  const trimmingPrice = localStorage.getItem('trimmingPrice');
-  const cornrowPrice = localStorage.getItem('cornrowPrice');
-  const weavePrice = localStorage.getItem('weavePrice');
-  const sewingPrice = localStorage.getItem('sewingPrice');
-  const minorStylingPrice = localStorage.getItem('minorStylingPrice');
-  const majorStylingPrice = localStorage.getItem('majorStylingPrice');
-  const microGravityPrice = localStorage.getItem('microGravityPrice');
+    // 其余代码保持不变
+    const defaultPrice = getQueryParam('defaultPrice');
+    const trimmingPrice = getQueryParam('trimmingPrice');
+    const cornrowPrice = getQueryParam('cornrowPrice');
+    const weavePrice = getQueryParam('weavePrice');
+    const sewingPrice = getQueryParam('sewingPrice');
+    const minorStylingPrice = getQueryParam('minorStylingPrice');
+    const majorStylingPrice = getQueryParam('majorStylingPrice');
+    const microGravityPrice = getQueryParam('microGravityPrice');
 
-      const prices = {
+    const prices = {
         '默认价格': defaultPrice,
         '仅修剪价格': trimmingPrice,
         '短发玉米须的价格': cornrowPrice,
@@ -571,43 +581,55 @@ function displayPrices() {
         '少量造型的价格': minorStylingPrice,
         '大量造型的价格': majorStylingPrice,
         '小反重力的价格': microGravityPrice,
-      };
+    };
+
+    for (const [key, value] of Object.entries(prices)) {
+        const priceElement = document.createElement('p');
+        priceElement.textContent = `${key}: ${value}`;
+        // 不要将元素添加到页面上
     }
+}
 
 
-document.addEventListener('DOMContentLoaded', function() {
-  const form = document.querySelector('form');
 
-  const antiGravityCheckbox = form.querySelector('input[name="antiGravity"]');
-  const antiGravityDetails = document.getElementById('antiGravityDetails');
 
-  antiGravityCheckbox.addEventListener('change', function() {
-    if (antiGravityCheckbox.checked) {
-      antiGravityDetails.style.display = 'inline';
-    } else {
-      antiGravityDetails.style.display = 'none';
-    }
-  });
 
-  const showAntiGravityModalLink = document.querySelector('.show-anti-gravity-modal');
-  const antiGravityModal = document.getElementById('antiGravityModal');
-  const closeAntiGravityModal = antiGravityModal.querySelector('.close');
 
-  showAntiGravityModalLink.addEventListener('click', function(e) {
-    e.preventDefault();
-    antiGravityModal.style.display = 'block';
-  });
+        document.addEventListener('DOMContentLoaded', function() {
+            displayPrices();
 
-  closeAntiGravityModal.addEventListener('click', function() {
-    antiGravityModal.style.display = 'none';
-  });
+            const form = document.querySelector('form');
 
-  window.addEventListener('click', function(event) {
-    if (event.target === antiGravityModal) {
-      antiGravityModal.style.display = 'none';
-    }
-  });
-});
+            const antiGravityCheckbox = form.querySelector('input[name="antiGravity"]');
+            const antiGravityDetails = document.getElementById('antiGravityDetails');
+
+            antiGravityCheckbox.addEventListener('change', function() {
+                if (antiGravityCheckbox.checked) {
+                    antiGravityDetails.style.display = 'inline';
+                } else {
+                    antiGravityDetails.style.display = 'none';
+                }
+            });
+
+            const showAntiGravityModalLink = document.querySelector('.show-anti-gravity-modal');
+            const antiGravityModal = document.getElementById('antiGravityModal');
+            const closeAntiGravityModal = antiGravityModal.querySelector('.close');
+
+            showAntiGravityModalLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                antiGravityModal.style.display = 'block';
+            });
+
+            closeAntiGravityModal.addEventListener('click', function() {
+                antiGravityModal.style.display = 'none';
+            });
+
+            window.addEventListener('click', function(event) {
+                if (event.target === antiGravityModal) {
+                    antiGravityModal.style.display = 'none';
+                }
+            });
+        });
 
 
 
