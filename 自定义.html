@@ -139,7 +139,7 @@ function saveAndGenerateLink() {
         lengthRanges: JSON.parse(localStorage.getItem('lengthRanges') || '[]'),
         expediteRanges: JSON.parse(localStorage.getItem('expediteRanges') || '[]')
     };
-console.log('Saved Params:', savedParams); // 添加调试输出
+    console.log('Saved Params:', savedParams); // 添加调试输出
 
     // 将复杂对象转换为 JSON 字符串并编码
     const encodedParams = {
@@ -147,21 +147,28 @@ console.log('Saved Params:', savedParams); // 添加调试输出
         lengthRanges: encodeURIComponent(JSON.stringify(savedParams.lengthRanges)),
         expediteRanges: encodeURIComponent(JSON.stringify(savedParams.expediteRanges))
     };
-console.log('Encoded Params:', encodedParams); // 添加调试输出
+    console.log('Encoded Params:', encodedParams); // 添加调试输出
 
     // 将参数编码成URL查询参数
     const params = new URLSearchParams(encodedParams);
     const serverURL = 'https://xiangtaijiang.com/';
     const pageName = 'another_page.html';
     const uniqueLink = `${serverURL}${pageName}?${params.toString()}`;
+    
+    // 获取页面上用于显示链接的固定位置
+    const savedPricesDiv = document.getElementById('savedPrices');
 
-    // 弹窗显示链接
-    alert(`您的专属链接为：${uniqueLink}`);
+    // 清空之前的链接显示
+    savedPricesDiv.innerHTML = '';
 
-    // 将链接显示在页面上
+    // 显示最新生成的链接
     const linkDisplay = document.createElement('p');
     linkDisplay.textContent = `您的专属链接为：${uniqueLink}`;
-    document.getElementById('savedPrices').appendChild(linkDisplay);
+    linkDisplay.style.backgroundColor = '#f0f0f0'; // 增加背景颜色
+    linkDisplay.style.padding = '10px'; // 增加内边距
+    linkDisplay.style.border = '1px solid #ccc'; // 增加边框
+    linkDisplay.style.boxShadow = '0 2px 5px rgba(0,0,0,0.1)'; // 增加阴影
+    savedPricesDiv.appendChild(linkDisplay);
 
     // 创建复制链接按钮
     const copyLinkButton = document.createElement('button');
@@ -176,7 +183,10 @@ console.log('Encoded Params:', encodedParams); // 添加调试输出
         alert('链接已复制到剪贴板！');
     };
     // 将复制链接按钮添加到页面
-    document.getElementById('savedPrices').appendChild(copyLinkButton);
+    savedPricesDiv.appendChild(copyLinkButton);
+
+    // 滚动到链接显示位置
+    savedPricesDiv.scrollIntoView({ behavior: 'smooth' });
 }
 
 
