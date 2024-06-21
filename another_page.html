@@ -327,17 +327,18 @@
   </div>
 
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const form = document.getElementById('pricingForm');
-      const resultDiv = document.getElementById('priceResult');
-      const closeModal = document.querySelectorAll('.close');
-      const resetBtn = document.getElementById('resetBtn');
-      const showPatchExampleLinks = document.querySelectorAll('.show-modal');
-      const patchModals = document.querySelectorAll('.modal');
-      const showFlipPartialModalLinks = document.querySelectorAll('.show-flip-partial-modal');
-      const showFlipFullModalLinks = document.querySelectorAll('.show-flip-full-modal');
-      const flipPartialModal = document.getElementById('flipPartialModal');
-      const flipFullModal = document.getElementById('flipFullModal');
+ document.addEventListener('DOMContentLoaded', function() {
+  const form = document.getElementById('pricingForm');
+  const resultDiv = document.getElementById('priceResult');
+  const closeModal = document.querySelectorAll('.close');
+  const resetBtn = document.getElementById('resetBtn');
+  const showPatchExampleLinks = document.querySelectorAll('.show-modal');
+  const patchModals = document.querySelectorAll('.modal');
+  const showFlipPartialModalLinks = document.querySelectorAll('.show-flip-partial-modal');
+  const showFlipFullModalLinks = document.querySelectorAll('.show-flip-full-modal');
+  const flipPartialModal = document.getElementById('flipPartialModal');
+  const flipFullModal = document.getElementById('flipFullModal');
+
 
       function toggleCornDetails() {
         const cornCheckbox = form.querySelector('input[name="corn"]');
@@ -380,38 +381,40 @@
         }
       }
 
-      function getQueryParam(param) {
-        const urlParams = new URLSearchParams(window.location.search);
-        return urlParams.get(param);
-      }
+   function getQueryParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+  }
 
-      function displayPrices() {
-        const defaultPrice = getQueryParam('defaultPrice');
-        const trimmingPrice = getQueryParam('trimmingPrice');
-        const cornrowPrice = getQueryParam('cornrowPrice');
-        const weavePrice = getQueryParam('weavePrice');
-        const sewingPrice = getQueryParam('sewingPrice');
-        const minorStylingPrice = getQueryParam('minorStylingPrice');
-        const majorStylingPrice = getQueryParam('majorStylingPrice');
-        const microGravityPrice = getQueryParam('microGravityPrice');
-        const lengthRanges = JSON.parse(getQueryParam('lengthRanges') || '[]');
-        const expediteRanges = JSON.parse(getQueryParam('expediteRanges') || '[]');
+  // 显示价格和范围的函数
+  function displayPrices() {
+    const defaultPrice = getQueryParam('defaultPrice');
+    const trimmingPrice = getQueryParam('trimmingPrice');
+    const cornrowPrice = getQueryParam('cornrowPrice');
+    const weavePrice = getQueryParam('weavePrice');
+    const sewingPrice = getQueryParam('sewingPrice');
+    const minorStylingPrice = getQueryParam('minorStylingPrice');
+    const majorStylingPrice = getQueryParam('majorStylingPrice');
+    const microGravityPrice = getQueryParam('microGravityPrice');
+    const lengthRanges = JSON.parse(getQueryParam('lengthRanges') || '[]');
+    const expediteRanges = JSON.parse(getQueryParam('expediteRanges') || '[]');
 
-        const prices = {
-          'defaultPrice': parseFloat(defaultPrice) || 0,
-          'trimmingPrice': parseFloat(trimmingPrice) || 0,
-          'cornrowPrice': parseFloat(cornrowPrice) || 0,
-          'weavePrice': parseFloat(weavePrice) || 0,
-          'sewingPrice': parseFloat(sewingPrice) || 0,
-          'minorStylingPrice': parseFloat(minorStylingPrice) || 0,
-          'majorStylingPrice': parseFloat(majorStylingPrice) || 0,
-          'microGravityPrice': parseFloat(microGravityPrice) || 0,
-          'lengthRanges': lengthRanges,
-          'expediteRanges': expediteRanges,
-        };
+    const prices = {
+      'defaultPrice': parseFloat(defaultPrice) || 0,
+      'trimmingPrice': parseFloat(trimmingPrice) || 0,
+      'cornrowPrice': parseFloat(cornrowPrice) || 0,
+      'weavePrice': parseFloat(weavePrice) || 0,
+      'sewingPrice': parseFloat(sewingPrice) || 0,
+      'minorStylingPrice': parseFloat(minorStylingPrice) || 0,
+      'majorStylingPrice': parseFloat(majorStylingPrice) || 0,
+      'microGravityPrice': parseFloat(microGravityPrice) || 0,
+      'lengthRanges': lengthRanges,
+      'expediteRanges': expediteRanges,
+    };
 
-        return prices;
-      }
+    return prices;
+  }
+
 
       function calculatePrice() {
         const prices = displayPrices();
