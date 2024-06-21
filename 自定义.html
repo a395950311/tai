@@ -142,14 +142,14 @@ function saveAndGenerateLink() {
 // 修改生成链接的方式为服务器 URL
 const serverURL = 'https://xiangtaijiang.com/';
 const pageName = 'another_page.html';
-const uniqueLink = ${serverURL}${pageName}?params=${encodeURIComponent(JSON.stringify(savedParams))};
+const uniqueLink = `${serverURL}${pageName}?params=${encodeURIComponent(JSON.stringify(savedParams))}`;
 
     // 弹窗显示本地文件链接
-    alert(您的专属链接为：${uniqueLink});
+    alert(`您的专属链接为：${uniqueLink}`);
 
     // 将链接显示在页面上
     const linkDisplay = document.createElement('p');
-    linkDisplay.textContent = 您的专属链接为：${uniqueLink};
+    linkDisplay.textContent = `您的专属链接为：${uniqueLink}`;
     document.getElementById('savedPrices').appendChild(linkDisplay);
 
     // 创建复制链接按钮
@@ -167,6 +167,8 @@ const uniqueLink = ${serverURL}${pageName}?params=${encodeURIComponent(JSON.stri
     // 将复制链接按钮添加到页面
     document.getElementById('savedPrices').appendChild(copyLinkButton);
 }
+
+
 
 
 
