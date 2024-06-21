@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>价格输入</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+  }
+  .container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  form {
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  label {
+    display: block;
+    margin-bottom: 5px;
+    color: #555;
+  }
+  input[type="number"],
+  input[type="text"] {
+    width: calc(100% - 10px);
+    padding: 10px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    transition: border-color 0.3s ease;
+  }
+  input[type="number"]:focus,
+  input[type="text"]:focus {
+    border-color: #007bff;
+    outline: none;
+  }
+  button {
+    padding: 10px 20px;
+    margin: 10px 0 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  button:hover {
+    background-color: #0056b3;
+  }
+  #savedPrices {
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+  }
+</style>
+</head>
+<body>
+  <h1>价格输入</h1>
+  <form id="priceForm">
+    <label for="defaultPrice">默认价格（仅修剪 包含短发玉米须和造型部分玉米须的价格）：</label>
+    <input type="number" id="defaultPrice" name="defaultPrice" required><br><br>
+    
+    <label for="weavePrice">贴片的价格：</label>
+    <input type="number" id="weavePrice" name="weavePrice" required><br><br>
+    
+    <label for="sewingPrice">中缝的价格：</label>
+    <input type="number" id="sewingPrice" name="sewingPrice" required><br><br>
+
+    <!-- 新增选项 -->
+    <label for="minorStylingPrice">少量造型的价格：</label>
+    <input type="number" id="minorStylingPrice" name="minorStylingPrice" required><br><br>
+
+    <label for="majorStylingPrice">大量造型的价格：</label>
+    <input type="number" id="majorStylingPrice" name="majorStylingPrice" required><br><br>
+
+    <label for="microGravityPrice">小反重力的价格：</label>
+    <input type="number" id="microGravityPrice" name="microGravityPrice" required><br><br>
+    <!-- 新增选项结束 -->
+
+    <div id="lengthRanges">
+      <div id="lengthRange0">
+        <label for="lengthRange">长发玉米须价格区间（比如20cm-40cm 价格40）：</label><br>
+        <input type="text" class="length-range" id="lengthRangeStart0" name="lengthRangeStart" placeholder="开始长度（数字）cm" required>
+        <input type="text" class="length-range" id="lengthRangeEnd0" name="lengthRangeEnd" placeholder="结束长度（数字）cm" required>
+        <input type="number" class="length-range" id="lengthRangePrice0" name="lengthRangePrice" placeholder="价格（数字）" required>
+        <button type="button" onclick="addLengthRange()">+</button>
+      </div>
+    </div>
+    
+    <div id="expediteRanges">
+      <div id="expediteRange0">
+        <label for="expediteRange">加急费计算（例如1月1日-1月15日 2倍）：</label><br>
+        <input type="number" class="expedite-range" id="expediteStartMonth0" name="expediteStartMonth" placeholder="开始月份" min="1" max="12" required>
+        <input type="number" class="expedite-range" id="expediteStartDay0" name="expediteStartDay" placeholder="开始日期" min="1" max="31" required>
+        <input type="number" class="expedite-range" id="expediteEndMonth0" name="expediteEndMonth" placeholder="结束月份" min="1" max="12" required>
+        <input type="number" class="expedite-range" id="expediteEndDay0" name="expediteEndDay" placeholder="结束日期" min="1" max="31" required>
+        <input type="number" step="0.1" class="expedite-range" id="expediteMultiplier0" name="expediteMultiplier" placeholder="倍数" required>
+        <button type="button" onclick="addExpediteRange()">+</button>
+      </div>
+    </div>
+    
+<button type="button" onclick="saveAndGenerateLink()">保存并生成链接</button>
+    <button type="button" onclick="displaySavedPrices()">显示保存结果</button>
+  </form>
+
+  <div id="savedPrices"></div>
+
+  <script>
+    let lengthRangeIndex = 1;
+    let expediteRangeIndex = 1;
+
+function saveAndGenerateLink() {
+    savePrices();
+
+    // 获取保存的参数
+    const savedParams = {
+        defaultPrice: localStorage.getItem('defaultPrice'),
+        weavePrice: localStorage.getItem('weavePrice'),
+        sewingPrice: localStorage.getItem('sewingPrice'),
+        minorStylingPrice: localStorage.getItem('minorStylingPrice'),
+        majorStylingPrice: localStorage.getItem('majorStylingPrice'),
+        microGravityPrice: localStorage.getItem('microGravityPrice'),
+        lengthRanges: JSON.parse(localStorage.getItem('lengthRanges') || '[]'),
+        expediteRanges: JSON.parse(localStorage.getItem('expediteRanges') || '[]')
+    };
+
+    // 修改生成链接的方式为服务器 URL
+const serverURL = 'https://xiangtaijiang.com/';
+const uniqueLink = `${serverURL}path/to/your/another_page.html?params=${encodeURIComponent(JSON.stringify(savedParams))}`;
+
+    // 弹窗显示本地文件链接
+    alert(`您的专属链接为：${uniqueLink}`);
+
+    // 将链接显示在页面上
+    const linkDisplay = document.createElement('p');
+    linkDisplay.textContent = `您的专属链接为：${uniqueLink}`;
+    document.getElementById('savedPrices').appendChild(linkDisplay);
+
+    // 创建复制链接按钮
+    const copyLinkButton = document.createElement('button');
+    copyLinkButton.textContent = '复制链接';
+    copyLinkButton.onclick = function() {
+        const dummyInput = document.createElement('input');
+        document.body.appendChild(dummyInput);
+        dummyInput.value = uniqueLink;
+        dummyInput.select();
+        document.execCommand('copy');
+        document.body.removeChild(dummyInput);
+        alert('链接已复制到剪贴板！');
+    };
+    // 将复制链接按钮添加到页面
+    document.getElementById('savedPrices').appendChild(copyLinkButton);
+}
+
+
+
+
+
+
+
+    function savePrices() {
+        // 清除本地存储的所有数据
+        localStorage.clear();
+        
+        const defaultPrice = document.getElementById('defaultPrice').value;
+        const weavePrice = document.getElementById('weavePrice').value;
+        const sewingPrice = document.getElementById('sewingPrice').value;
+        const minorStylingPrice = document.getElementById('minorStylingPrice').value;
+        const majorStylingPrice = document.getElementById('majorStylingPrice').value;
+        const microGravityPrice = document.getElementById('microGravityPrice').value;
+
+        localStorage.setItem('defaultPrice', defaultPrice);
+        localStorage.setItem('weavePrice', weavePrice);
+        localStorage.setItem('sewingPrice', sewingPrice);
+        localStorage.setItem('minorStylingPrice', minorStylingPrice);
+        localStorage.setItem('majorStylingPrice', majorStylingPrice);
+        localStorage.setItem('microGravityPrice', microGravityPrice);
+
+        const lengthRanges = [];
+        for (let i = 0; i < lengthRangeIndex; i++) {
+            const startLength = document.getElementById(`lengthRangeStart${i}`);
+            const endLength = document.getElementById(`lengthRangeEnd${i}`);
+            const price = document.getElementById(`lengthRangePrice${i}`);
+            
+            if (startLength && endLength && price) {
+                lengthRanges.push({
+                    start: startLength.value,
+                    end: endLength.value,
+                    price: price.value
+                });
+            }
+        }
+        
+        localStorage.setItem('lengthRanges', JSON.stringify(lengthRanges));
+        
+        const expediteRanges = [];
+        for (let i = 0; i < expediteRangeIndex; i++) {
+            const startMonth = document.getElementById(`expediteStartMonth${i}`);
+            const startDay = document.getElementById(`expediteStartDay${i}`);
+            const endMonth = document.getElementById(`expediteEndMonth${i}`);
+            const endDay = document.getElementById(`expediteEndDay${i}`);
+            const multiplier = document.getElementById(`expediteMultiplier${i}`);
+            
+            if (startMonth && startDay && endMonth && endDay && multiplier) {
+                expediteRanges.push({
+                    startMonth: startMonth.value,
+                    startDay: startDay.value,
+                    endMonth: endMonth.value,
+                    endDay: endDay.value,
+                    multiplier: multiplier.value
+                });
+            }
+        }
+
+        localStorage.setItem('expediteRanges', JSON.stringify(expediteRanges));
+    }
+
+    function saveAndRedirect() {
+        savePrices();
+        window.location.href = 'another_page.html';
+    }
+
+    function addLengthRange() {
+        const lengthRangesContainer = document.getElementById('lengthRanges');
+        const newLengthRangeDiv = document.createElement('div');
+        newLengthRangeDiv.id = `lengthRange${lengthRangeIndex}`;
+
+        const lengthRangeFields = `
+            <label for="lengthRange">长发玉米须价格区间：</label><br>
+            <input type="text" class="length-range" id="lengthRangeStart${lengthRangeIndex}" name="lengthRangeStart" placeholder="开始长度（数字）cm" required>
+            <input type="text" class="length-range" id="lengthRangeEnd${lengthRangeIndex}" name="lengthRangeEnd" placeholder="结束长度（数字）cm" required>
+            <input type="number" class="length-range" id="lengthRangePrice${lengthRangeIndex}" name="lengthRangePrice" placeholder="价格（数字）" required>
+            <button type="button" onclick="addLengthRange()">+</button>
+            <button type="button" onclick="removeLengthRange(${lengthRangeIndex})">-</button>
+        `;
+
+        newLengthRangeDiv.innerHTML = lengthRangeFields;
+
+        lengthRangesContainer.appendChild(newLengthRangeDiv);
+        lengthRangeIndex++;
+    }
+
+    function removeLengthRange(index) {
+        const lengthRangeToRemove = document.getElementById(`lengthRange${index}`);
+        if (lengthRangeToRemove) {
+            lengthRangeToRemove.remove();
+        }
+
+        // 更新其他区间的索引
+        const lengthRanges = document.querySelectorAll('#lengthRanges > div');
+        lengthRanges.forEach((range, i) => {
+            range.id = `lengthRange${i}`;
+            range.querySelector('[id^="lengthRangeStart"]').id = `lengthRangeStart${i}`;
+            range.querySelector('[id^="lengthRangeEnd"]').id = `lengthRangeEnd${i}`;
+            range.querySelector('[id^="lengthRangePrice"]').id = `lengthRangePrice${i}`;
+            range.querySelector('[onclick^="removeLengthRange"]').setAttribute('onclick', `removeLengthRange(${i})`);
+        });
+
+        lengthRangeIndex = lengthRanges.length;
+
+        // 清除多余的保存结果
+        localStorage.setItem('lengthRanges', JSON.stringify(lengthRanges));
+    }
+
+    function addExpediteRange() {
+        const expediteRangesContainer = document.getElementById('expediteRanges');
+        const newExpediteRangeDiv = document.createElement('div');
+        newExpediteRangeDiv.id = `expediteRange${expediteRangeIndex}`;
+
+        const expediteRangeFields = `
+            <label for="expediteRange">加急费计算：</label><br>
+            <input type="number" class="expedite-range" id="expediteStartMonth${expediteRangeIndex}" name="expediteStartMonth" placeholder="开始月份" min="1" max="12" required>
+            <input type="number" class="expedite-range" id="expediteStartDay${expediteRangeIndex}" name="expediteStartDay" placeholder="开始日期" min="1" max="31" required>
+            <input type="number" class="expedite-range" id="expediteEndMonth${expediteRangeIndex}" name="expediteEndMonth" placeholder="结束月份" min="1" max="12" required>
+            <input type="number" class="expedite-range" id="expediteEndDay${expediteRangeIndex}" name="expediteEndDay" placeholder="结束日期" min="1" max="31" required>
+            <input type="number" class="expedite-range" id="expediteMultiplier${expediteRangeIndex}" name="expediteMultiplier" placeholder="倍数" required>
+            <button type="button" onclick="addExpediteRange()">+</button>
+            <button type="button" onclick="removeExpediteRange(${expediteRangeIndex})">-</button>
+        `;
+
+        newExpediteRangeDiv.innerHTML = expediteRangeFields;
+
+        expediteRangesContainer.appendChild(newExpediteRangeDiv);
+        expediteRangeIndex++;
+    }
+
+    function removeExpediteRange(index) {
+        const expediteRangeToRemove = document.getElementById(`expediteRange${index}`);
+        if (expediteRangeToRemove) {
+            expediteRangeToRemove.remove();
+        }
+
+        // 更新其他区间的索引
+        const expediteRanges = document.querySelectorAll('#expediteRanges > div');
+        expediteRanges.forEach((range, i) => {
+            range.id = `expediteRange${i}`;
+            range.querySelector('[id^="expediteStartMonth"]').id = `expediteStartMonth${i}`;
+            range.querySelector('[id^="expediteStartDay"]').id = `expediteStartDay${i}`;
+            range.querySelector('[id^="expediteEndMonth"]').id = `expediteEndMonth${i}`;
+            range.querySelector('[id^="expediteEndDay"]').id = `expediteEndDay${i}`;
+            range.querySelector('[id^="expediteMultiplier"]').id = `expediteMultiplier${i}`;
+            range.querySelector('[onclick^="removeExpediteRange"]').setAttribute('onclick', `removeExpediteRange(${i})`);
+        });
+
+        expediteRangeIndex = expediteRanges.length;
+
+        // 清除多余的保存结果
+        localStorage.setItem('expediteRanges', JSON.stringify(expediteRanges));
+    }
+
+    function displaySavedPrices() {
+        const savedPricesDiv = document.getElementById('savedPrices');
+        savedPricesDiv.innerHTML = `
+            <p>默认价格: ${localStorage.getItem('defaultPrice')}</p>
+            <p>贴片的价格: ${localStorage.getItem('weavePrice')}</p>
+            <p>中缝的价格: ${localStorage.getItem('sewingPrice')}</p>
+            <p>少量造型的价格: ${localStorage.getItem('minorStylingPrice')}</p>
+            <p>大量造型的价格: ${localStorage.getItem('majorStylingPrice')}</p>
+            <p>小反重力的价格: ${localStorage.getItem('microGravityPrice')}</p>
+        `;
+
+        const lengthRanges = JSON.parse(localStorage.getItem('lengthRanges') || '[]');
+        lengthRanges.forEach((range, i) => {
+            const lengthRangeInfo = `
+                <p>长发玉米须价格区间 ${i + 1}:</p>
+                <p>开始长度: ${range.start} cm</p>
+                <p>结束长度: ${range.end} cm</p>
+                <p>价格: ${range.price}</p>
+            `;
+            savedPricesDiv.innerHTML += lengthRangeInfo;
+        });
+
+        const expediteRanges = JSON.parse(localStorage.getItem('expediteRanges') || '[]');
+        expediteRanges.forEach((range, i) => {
+            const expediteRangeInfo = `
+                <p>加急费区间 ${i + 1}:</p>
+                <p>开始日期: ${range.startMonth}月${range.startDay}日</p>
+                <p>结束日期: ${range.endMonth}月${range.endDay}日</p>
+                <p>倍数: ${range.multiplier}</p>
+            `;
+            savedPricesDiv.innerHTML += expediteRangeInfo;
+        });
+    }
+
+    function enforceRange(input) {
+        const min = parseInt(input.min);
+        const max = parseInt(input.max);
+        let value = parseInt(input.value);
+
+        if (value < min) {
+            input.value = min;
+        } else if (value > max) {
+            input.value = max;
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('input[type="number"]').forEach(input => {
+            input.addEventListener('input', () => enforceRange(input));
+        });
+    });
+  </script>
+</body>
+</html>

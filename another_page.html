@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>翔太酱约毛价格计算</title>
+
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-RE9SN1R820"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-RE9SN1R820');
+</script>
+
+
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  .container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px;
+  }
+  h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    position: relative;
+  }
+  .button-container {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  form {
+    margin-bottom: 20px;
+  }
+  .input-wrapper {
+    margin-bottom: 15px;
+  }
+  .input-wrapper label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  .input-wrapper input[type="checkbox"], 
+  .input-wrapper input[type="radio"] {
+    margin-right: 10px;
+  }
+  .input-wrapper input[type="number"] {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+  }
+  .long-hair-options, .full-corn-length-input {
+    margin-left: 20px;
+    margin-top: 10px;
+  }
+  #priceResult {
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #e0ffe0;
+  }
+  .btn-example {
+    display: inline-block;
+    margin-top: 10px;
+    background-color: #007bff;
+    color: white;
+    padding: 5px 10px;
+    text-decoration: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  .btn-example:hover {
+    background-color: #0056b3;
+  }
+  .note {
+    text-align: center;
+    margin-top: 20px;
+    display: none;
+  }
+  /* Modal styles */
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+.show-anti-gravity-modal {
+  display: inline-block;
+  background-color: #007bff;
+  color: white;
+  padding: 5px 10px;
+  text-decoration: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 13px; /* 设置字体大小为10px */
+  min-width: auto; /* 自适应字体大小 */
+  max-width: auto; /* 自适应字体大小 */
+}
+
+.show-anti-gravity-modal:hover {
+  background-color: #0056b3;
+}
+
+  .modal-content {
+    margin: 15% auto;
+    padding: 10px; /* 调整padding */
+    background-color: #fff;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 800px;
+    font-family: 'Arial', sans-serif;
+    color: #333;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    position: relative; /* 使close按钮相对于modal-content定位 */
+  }
+  .modal-content img {
+    width: 100%;
+    border-radius: 10px;
+    margin-bottom: 15px;
+  }
+  .close {
+    color: #333;
+    position: absolute; /* 绝对定位关闭按钮 */
+    right: 10px; /* 调整位置 */
+    top: 10px; /* 调整位置 */
+    font-size: 28px;
+    font-weight: bold;
+  }
+  .close:hover, .close:focus {
+    color: #bbb;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+.example-btn {
+  display: inline-block;
+  background-color: #007bff;
+  color: white;
+  padding: 5px 10px;
+  text-decoration: none;
+  border-radius: 5px;
+  cursor: pointer;
+  /* 添加你想要的大小样式 */
+ line-height: 24px; /* 设置行高 */
+  min-width: 80px; /* 设置最小宽度 */
+  max-width: 200px; /* 设置最大宽度 */
+  font-size: 12px;
+}
+
+.example-btn:hover {
+  background-color: #0056b3;
+}
+
+</style>
+</head>
+<body>
+  <div class="container">
+<h2>价格计算
+  <div class="button-container">
+    <button id="infoBtn" class="btn-example">约毛流程</button>
+  </div>
+</h2>
+
+
+    
+    <form id="pricingForm">
+      <div class="input-wrapper">
+<div class="input-wrapper">
+<label style="color: red;">
+请选择使用日期：
+</label>
+  <select id="monthSelect">
+    <!-- 月份选项将由 JavaScript 动态生成 -->
+  </select>
+  <select id="daySelect">
+    <!-- 日期选项将由 JavaScript 动态生成 -->
+  </select>
+</div>
+
+
+        <label>
+          <input type="checkbox" name="patch" value="patch"> 仅修剪（单选 勾选后其余选项不可选）
+        <a href="#" class="btn-example show-modal example-btn" data-target="patchModal">示例图（点击查看）</a>
+        <label>
+          <input type="checkbox" name="corn" value="corn" checked disabled> 需要玉米须
+        <a href="#" class="btn-example show-modal example-btn" data-target="cornModal">示例图（点击查看）</a>
+        <div id="cornDetails">
+          <label>
+            <input type="radio" name="hairLength" value="short" id="shortHair"> 短发
+          </label>
+          <label>
+            <input type="radio" name="hairLength" value="long"> 长发
+          </label>
+          <div class="long-hair-options">
+            <label>
+              <input type="radio" name="cornType" value="partial"> 造型部分玉米须
+            </label>
+            <label>
+              <input type="radio" name="cornType" value="full"> 全头玉米须（必须输入头发的长度）
+            </label>
+            <div class="full-corn-length-input" style="display: none;">
+              <label>头发长度（数字）：<input type="number" name="fullCornHairLength" min="1" step="1"></label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="input-wrapper">
+        <label>
+         <input type="checkbox" name="patch" value="patch"> 需要贴片
+        <a href="#" class="btn-example show-modal example-btn" data-target="patchModal2">示例图（点击查看长图）</a>
+      </div>
+      <div class="input-wrapper">
+        <label>
+          <input type="checkbox" name="flip" value="flip"> 需要造型（反翘、波浪、内扣等）
+        </label>
+        <div id="flipDetails" style="display: none;">
+          <label>
+            <input type="radio" name="flipType" value="partial"> 少量造型
+          <a href="#" class="btn-example show-flip-partial-modal example-btn" data-target="flipPartialModal">示例图（点击查看）</a>
+          </label>
+          <label>
+            <input type="radio" name="flipType" value="full"> 大量造型
+          <a href="#" class="btn-example show-flip-full-modal example-btn" data-target="flipFullModal">示例图（点击查看）</a>
+        </div>
+      </div>
+<div class="input-wrapper" style="display: flex; align-items: center;">
+  <label>
+    <input type="checkbox" name="antiGravity" value="antiGravity"> 需要小反重力
+  </label>
+  <label style="margin-left: 10px;">
+    <input type="number" name="antiGravityRoot" min="0" max="99" step="1" style="width: 30px;">
+根
+  </label>
+  <a href="#" class="btn-example show-anti-gravity-modal" style="margin-left: 10px;">示例图（点击查看）</a>
+</div>
+      <div class="input-wrapper">
+        <label>
+          <input type="checkbox" name="seam" value="seam"> 需要中缝
+<a href="#" class="btn-example show-seam-modal example-btn" data-target="seamModal">示例图（点击查看长图）</a>
+        </label>
+      </div>
+    </form>
+
+    <div id="priceResult">价格：</div>
+    <p class="note">价格可能会有所波动，但相差不大。如果接受这个价格，请截图此页面给老师哦。PS：大型反重力和万用改的毛胚需要咨询毛娘老师
+<a href="#" class="btn-example show-universal-hair-modal example-btn" data-target="universalHairModal">万用毛示例图（点击查看）</a>
+</p>
+    <button id="resetBtn" class="btn-example">重置选项</button>
+  </div>
+
+  <!-- The Modal -->
+  <div id="patchModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <img src="仅修剪.jpg" alt="仅修剪示例图">
+    </div>
+  </div>
+  <div id="cornModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <img src="玉米须.jpg" alt="玉米须示例图">
+    </div>
+  </div>
+  <div id="patchModal2" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <img src="贴片.jpg" alt="贴片示例图">
+    </div>
+  </div>
+  <div id="flipPartialModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <img src="少量造型.jpg" alt="少量造型示例图">
+    </div>
+  </div>
+  <div id="flipFullModal" class="modal">
+<div class="modal-content">
+<span class="close">×</span>
+<img src="大量造型.jpg" alt="大量造型示例图">
+</div>
+  </div>
+<div id="seamModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <img src="中缝.jpg" alt="中缝示例图">
+  </div>
+</div>
+<div id="antiGravityModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <img src="反重力.jpg" alt="小反重力示例图">
+  </div>
+</div>
+<div id="universalHairModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <img src="万用毛.jpg" alt="万用毛示例图">
+  </div>
+</div>
+
+
+<div id="infoModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <p>1.查看价格是否在预算内→2.(价格选项页面截图)(人设)和(毛胚图)发给毛娘→3.最终报价支付定金→4.寄毛给毛娘或毛娘代买→5.耐心等待做好看成品→6.补尾款→7.发货。</p>
+  </div>
+</div>
+  <script>
+    const form = document.getElementById('pricingForm');
+    const resultDiv = document.getElementById('priceResult');
+    const closeModal = document.querySelectorAll('.close');
+    const resetBtn = document.getElementById('resetBtn');
+    const showPatchExampleLinks = document.querySelectorAll('.show-modal');
+    const patchModals = document.querySelectorAll('.modal');
+    const showFlipPartialModalLinks = document.querySelectorAll('.show-flip-partial-modal');
+    const showFlipFullModalLinks = document.querySelectorAll('.show-flip-full-modal');
+    const flipPartialModal = document.getElementById('flipPartialModal');
+    const flipFullModal = document.getElementById('flipFullModal');
+
+    showPatchExampleLinks.forEach((link, index) => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        patchModals[index].style.display = 'block';
+      });
+    });
+
+    showFlipPartialModalLinks.forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        flipPartialModal.style.display = 'block';
+      });
+    });
+
+    showFlipFullModalLinks.forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        flipFullModal.style.display = 'block';
+      });
+    });
+
+
+
+
+
+// JavaScript 中添加万用毛示例图链接的点击事件监听器
+document.addEventListener('DOMContentLoaded', function() {
+  const showUniversalHairModalLink = document.querySelector('.show-universal-hair-modal');
+  const universalHairModal = document.getElementById('universalHairModal');
+  const closeUniversalHairModal = universalHairModal.querySelector('.close');
+
+  showUniversalHairModalLink.addEventListener('click', function(e) {
+    e.preventDefault();
+    universalHairModal.style.display = 'block';
+  });
+
+  closeUniversalHairModal.addEventListener('click', function() {
+    universalHairModal.style.display = 'none';
+  });
+
+  window.addEventListener('click', function(event) {
+    if (event.target === universalHairModal) {
+      universalHairModal.style.display = 'none';
+    }
+  });
+});
+
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('pricingForm');
+    const patchCheckbox = form.querySelector('input[name="patch"]');
+    const allCheckboxes = form.querySelectorAll('input[type="checkbox"]');
+    const allRadioInputs = form.querySelectorAll('input[type="radio"]');
+
+
+const showSeamModalLink = document.querySelector('.show-seam-modal');
+const seamModal = document.getElementById('seamModal');
+
+  const infoBtn = document.getElementById('infoBtn');
+  const infoModal = document.getElementById('infoModal');
+  const closeInfoModal = infoModal.querySelector('.close');
+
+  infoBtn.addEventListener('click', function() {
+    infoModal.style.display = 'block';
+  });
+
+  closeInfoModal.addEventListener('click', function() {
+    infoModal.style.display = 'none';
+  });
+
+  window.addEventListener('click', function(event) {
+    if (event.target === infoModal) {
+      infoModal.style.display = 'none';
+    }
+  });
+
+showFlipPartialModalLinks.forEach(link => {
+  link.addEventListener('click', function(e) {
+    e.preventDefault();
+    flipPartialModal.style.display = 'block';
+  });
+});
+
+showSeamModalLink.addEventListener('click', function(e) {
+  e.preventDefault();
+  seamModal.style.display = 'block';
+});
+
+    // 添加“仅修剪”复选框状态改变的事件监听器
+    patchCheckbox.addEventListener('change', function() {
+      if (patchCheckbox.checked) {
+        // 如果“仅修剪”被选中，则禁用其他所有复选框和单选按钮
+        allCheckboxes.forEach(checkbox => {
+          if (checkbox !== patchCheckbox) {
+            checkbox.disabled = true;
+          }
+        });
+        allRadioInputs.forEach(radio => {
+          radio.disabled = true;
+        });
+      } else {
+        // 如果“仅修剪”未被选中，则启用其他所有复选框和单选按钮
+        allCheckboxes.forEach(checkbox => {
+          checkbox.disabled = false;
+        });
+        allRadioInputs.forEach(radio => {
+          radio.disabled = false;
+        });
+      }
+    });
+  });
+    document.addEventListener('DOMContentLoaded', function() {
+      form.querySelector('input[name="corn"]').disabled = true;
+      toggleCornDetails();
+      toggleFlipDetails();
+
+      form.addEventListener('change', function() {
+        calculatePrice();
+        toggleCornDetails();
+        toggleFlipDetails();
+      });
+
+      closeModal.forEach(close => {
+        close.addEventListener('click', function() {
+          patchModals.forEach(modal => {
+            modal.style.display = 'none';
+          });
+          flipPartialModal.style.display = 'none';
+          flipFullModal.style.display = 'none';
+        });
+      });
+
+
+
+      window.addEventListener('click', function(event) {
+        patchModals.forEach(modal => {
+          if (event.target === modal) {
+            modal.style.display = 'none';
+          }
+        });
+        if (event.target === flipPartialModal) {
+          flipPartialModal.style.display = 'none';
+        }
+        if (event.target === flipFullModal) {
+          flipFullModal.style.display = 'none';
+        }
+      });
+
+      resetBtn.addEventListener('click', function() {
+        resetForm();
+      });
+    });
+
+
+
+
+function toggleCornDetails() {
+  const cornCheckbox = form.querySelector('input[name="corn"]');
+  const hairLengthRadios = form.querySelectorAll('input[name="hairLength"]');
+  const cornTypeRadios = form.querySelectorAll('input[name="cornType"]');
+  const fullCornLengthInput = document.querySelector('.full-corn-length-input');
+
+  if (hairLengthRadios[1].checked && cornCheckbox.checked) {
+    // 如果选择了长发并且玉米须选项被选中，则显示二级选项
+    cornTypeRadios.forEach(radio => {
+      radio.parentNode.style.display = 'block'; // 显示部分玉米须和全部玉米须的选项
+    });
+    if (cornTypeRadios[1].checked) { // 如果选择了全头玉米须
+      fullCornLengthInput.style.display = 'block'; // 显示全头玉米须长度输入框
+    } else {
+      fullCornLengthInput.style.display = 'none'; // 隐藏全头玉米须长度输入框
+    }
+  } else {
+    // 否则，隐藏二级选项和长度输入框
+    cornTypeRadios.forEach(radio => {
+      radio.parentNode.style.display = 'none'; // 隐藏部分玉米须和全部玉米须的选项
+    });
+    fullCornLengthInput.style.display = 'none'; // 隐藏全头玉米须长度输入框
+  }
+}
+
+    function displayPrices() {
+      const priceDisplay = document.getElementById('priceDisplay');
+
+      const defaultPrice = localStorage.getItem('defaultPrice');
+      const trimmingPrice = localStorage.getItem('trimmingPrice');
+      const cornrowPrice = localStorage.getItem('cornrowPrice');
+      const weavePrice = localStorage.getItem('weavePrice');
+      const sewingPrice = localStorage.getItem('sewingPrice');
+      const minorStylingPrice = localStorage.getItem('minorStylingPrice');
+      const majorStylingPrice = localStorage.getItem('majorStylingPrice');
+      const microGravityPrice = localStorage.getItem('microGravityPrice');
+
+      const prices = {
+        '默认价格': defaultPrice,
+        '仅修剪价格': trimmingPrice,
+        '短发玉米须的价格': cornrowPrice,
+        '贴片的价格': weavePrice,
+        '中缝的价格': sewingPrice,
+        '少量造型的价格': minorStylingPrice,
+        '大量造型的价格': majorStylingPrice,
+        '小反重力的价格': microGravityPrice,
+      };
+    }
+
+
+document.addEventListener('DOMContentLoaded', function() {
+  const form = document.querySelector('form');
+
+  const antiGravityCheckbox = form.querySelector('input[name="antiGravity"]');
+  const antiGravityDetails = document.getElementById('antiGravityDetails');
+
+  antiGravityCheckbox.addEventListener('change', function() {
+    if (antiGravityCheckbox.checked) {
+      antiGravityDetails.style.display = 'inline';
+    } else {
+      antiGravityDetails.style.display = 'none';
+    }
+  });
+
+  const showAntiGravityModalLink = document.querySelector('.show-anti-gravity-modal');
+  const antiGravityModal = document.getElementById('antiGravityModal');
+  const closeAntiGravityModal = antiGravityModal.querySelector('.close');
+
+  showAntiGravityModalLink.addEventListener('click', function(e) {
+    e.preventDefault();
+    antiGravityModal.style.display = 'block';
+  });
+
+  closeAntiGravityModal.addEventListener('click', function() {
+    antiGravityModal.style.display = 'none';
+  });
+
+  window.addEventListener('click', function(event) {
+    if (event.target === antiGravityModal) {
+      antiGravityModal.style.display = 'none';
+    }
+  });
+});
+
+
+
+    function toggleFlipDetails() {
+      const flipDetails = document.getElementById('flipDetails');
+      const flipCheckbox = form.querySelector('input[name="flip"]');
+      const flipRadios = form.querySelectorAll('input[name="flipType"]');
+      
+      if (flipCheckbox.checked) {
+        flipDetails.style.display = 'block';
+        flipRadios.forEach(radio => {
+          radio.disabled = false;
+        });
+      } else {
+        flipDetails.style.display = 'none';
+        flipRadios.forEach(radio => {
+          radio.disabled = true;
+        });
+      }
+    }
+
+
+
+function resetForm() {
+  form.reset();
+  const allCheckboxes = form.querySelectorAll('input[type="checkbox"]');
+  const allRadioInputs = form.querySelectorAll('input[type="radio"]');
+  allCheckboxes.forEach(checkbox => {
+    checkbox.disabled = false;
+  });
+  allRadioInputs.forEach(radio => {
+    radio.disabled = false;
+  });
+  form.querySelector('input[name="corn"]').disabled = true;
+  toggleCornDetails();
+  toggleFlipDetails();
+  calculatePrice();
+}
+
+
+  document.addEventListener("DOMContentLoaded", function() {
+    const monthSelect = document.getElementById("monthSelect");
+    const daySelect = document.getElementById("daySelect");
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = currentDate.getMonth() + 1; // 月份从0开始，需要加1
+    const currentDay = currentDate.getDate();
+
+const earliestSelectableDate = new Date(currentYear, currentMonth - 1, currentDay + 5);
+const nextMonth = currentMonth === 12 ? 1 : currentMonth + 1; // 处理12月跨年到1月的情况
+const nextMonthYear = currentMonth === 12 ? currentYear + 1 : currentYear; // 1月需要增加一年
+const nextMonthFifthDate = new Date(nextMonthYear, nextMonth - 1, 5);
+
+
+    // 初始化月份下拉框
+    const initMonthSelect = () => {
+      monthSelect.innerHTML = '<option value="">-- 选择月份 --</option>'; // 添加默认空白选项
+      for (let month = currentMonth; month <= 12; month++) {
+        const option = document.createElement("option");
+        option.value = month;
+        option.text = `${month}月`;
+        monthSelect.appendChild(option);
+      }
+    };
+
+    // 初始化日期下拉框
+    const initDaySelect = (selectedMonth) => {
+      daySelect.innerHTML = '<option value="">-- 选择日期 --</option>'; // 添加默认空白选项
+      let startDay = 1;
+      let daysInMonth;
+
+      // 计算所选月份的天数
+      if (selectedMonth) {
+        daysInMonth = new Date(currentYear, selectedMonth, 0).getDate();
+        if (selectedMonth == currentMonth) {
+          startDay = currentDay + 5;
+          if (startDay > daysInMonth) startDay = daysInMonth; // 防止超过当月天数
+        }
+      } else {
+        daysInMonth = 31; // 默认情况
+      }
+
+      for (let day = startDay; day <= daysInMonth; day++) {
+        const option = document.createElement("option");
+        option.value = day;
+        option.text = `${day}日`;
+        daySelect.appendChild(option);
+      }
+    };
+
+    // 月份选择改变时更新日期选择框
+    monthSelect.addEventListener("change", (event) => {
+      const selectedMonth = parseInt(event.target.value);
+      initDaySelect(selectedMonth);
+    });
+
+    // 初始化月份和日期选择框
+    initMonthSelect();
+    initDaySelect(); // 默认情况下日期选择框为空白
+  });
+
+const currentDate = new Date();
+const currentYear = currentDate.getFullYear();
+const currentMonth = currentDate.getMonth() + 1;
+const currentDay = currentDate.getDate();
+const earliestSelectableDate = new Date(currentYear, currentMonth - 1, currentDay + 5);
+const nextMonth = currentMonth === 12 ? 1 : currentMonth + 1;
+const nextMonthYear = currentMonth === 12 ? currentYear + 1 : currentYear;
+const nextMonthFifthDate = new Date(nextMonthYear, nextMonth - 1, 5);
+
+
+function calculatePrice() {
+      const minorStylingPrice = parseFloat(localStorage.getItem('minorStylingPrice')) || 0;
+      const majorStylingPrice = parseFloat(localStorage.getItem('majorStylingPrice')) || 0;
+      const defaultPrice = parseFloat(localStorage.getItem('defaultPrice')) || 0;
+      const trimmingPrice = parseFloat(localStorage.getItem('trimmingPrice')) || 0;
+      const weavePrice = parseFloat(localStorage.getItem('weavePrice')) || 0;
+      const sewingPrice = parseFloat(localStorage.getItem('sewingPrice')) || 0;
+      const cornrowPrice = parseFloat(localStorage.getItem('cornrowPrice')) || 0;
+      const microGravityPrice = parseFloat(localStorage.getItem('microGravityPrice')) || 0;
+
+
+  let basePrice = defaultPrice;
+  let price = basePrice;
+  const patchCheckbox = form.querySelector('input[name="patch"]');
+
+  // 获取用户选择的日期
+  const selectedMonth = parseInt(document.getElementById('monthSelect').value);
+  const selectedDay = parseInt(document.getElementById('daySelect').value);
+
+// 从本地存储中获取保存的区间数量
+const savedRanges = JSON.parse(localStorage.getItem('expediteRanges') || '[]');
+
+// 动态生成 dateMultipliers 数组，并计算 selectedMultiplier
+const dateMultipliers = [];
+let selectedMultiplier = 1; // 初始化为1
+savedRanges.forEach((range, index) => {
+    // 解析开始日期和结束日期
+    const startDate = [parseFloat(range.startMonth), parseFloat(range.startDay)];
+    const endDate = [parseFloat(range.endMonth), parseFloat(range.endDay)];
+    // 解析倍数
+    const multiplier = parseFloat(range.multiplier);
+
+    // 确保数据有效性，比如检查 startDate、endDate 和 multiplier 是否合法
+    if (!isNaN(startDate[0]) && !isNaN(startDate[1]) && !isNaN(endDate[0]) && !isNaN(endDate[1]) && !isNaN(multiplier)) {
+        // 控制台输出当前区间的参数信息
+        console.log(`Range ${index + 1}: Start Date: ${startDate[0]}/${startDate[1]}, End Date: ${endDate[0]}/${endDate[1]}, Multiplier: ${multiplier}`);
+
+        // 计算当前区间的 selectedMultiplier
+        const currentDate = new Date(); // 当前日期
+        const currentMonth = currentDate.getMonth() + 1;
+        const currentDay = currentDate.getDate();
+        const isInRange = (currentMonth > startDate[0] || (currentMonth === startDate[0] && currentDay >= startDate[1])) &&
+                          (currentMonth < endDate[0] || (currentMonth === endDate[0] && currentDay <= endDate[1]));
+        if (isInRange) {
+            selectedMultiplier *= multiplier; // 如果当前日期在区间内，则乘以该区间的倍数
+        }
+
+        // 添加有效的区间数据到 dateMultipliers 数组中
+        dateMultipliers.push({ start: startDate, end: endDate, multiplier: multiplier });
+    }
+});
+
+// 检查选择的日期是否在任何区间内
+for (const dateMultiplier of dateMultipliers) {
+    const [startMonth, startDay] = dateMultiplier.start;
+    const [endMonth, endDay] = dateMultiplier.end;
+    if (
+      (selectedMonth > startMonth || (selectedMonth === startMonth && selectedDay >= startDay)) &&
+      (selectedMonth < endMonth || (selectedMonth === endMonth && selectedDay <= endDay))
+    ) {
+      selectedMultiplier = dateMultiplier.multiplier;
+      break;
+    }
+}
+// 定义一个通用函数来获取任意一个区间的任意一个参数
+function getLengthRangeParameter(index, parameter) {
+    const lengthRanges = JSON.parse(localStorage.getItem('lengthRanges') || '[]');
+    if (index >= 0 && index < lengthRanges.length) {
+        const range = lengthRanges[index];
+        if (range.hasOwnProperty(parameter)) {
+            return range[parameter];
+        } else {
+            console.log(`参数 ${parameter} 无效，返回默认值 0`);
+            return 0;
+        }
+    } else {
+        console.log(`索引 ${index} 无效，返回默认值 0`);
+        return 0;
+    }
+}
+
+
+// 计算其他选项的价格
+if (!patchCheckbox.checked) { // 仅修剪不改变价格
+    if (form.querySelector('input[name="corn"]').checked) {
+        const hairLength = form.querySelector('input[name="hairLength"]:checked');
+        if (hairLength && hairLength.value === 'long') {
+            const cornType = form.querySelector('input[name="cornType"]:checked');
+            if (cornType && cornType.value === 'full') {
+                const hairLengthInput = form.querySelector('input[name="fullCornHairLength"]');
+                if (hairLengthInput && hairLengthInput.value) {
+                    const fullCornHairLength = parseInt(hairLengthInput.value);
+                    if (!isNaN(fullCornHairLength)) {
+                        const lengthRanges = JSON.parse(localStorage.getItem('lengthRanges') || '[]');
+                        
+                        // 添加调试输出
+                        console.log('lengthRanges:', lengthRanges);
+                        console.log('fullCornHairLength:', fullCornHairLength);
+                        
+                        // 动态获取保存的长度区间和价格
+                        let lengthRangeFound = false;
+                        for (let i = 0; i < lengthRanges.length; i++) {
+                            const startLength = parseInt(lengthRanges[i].start) || 0; // 默认为0
+                            const endLength = parseInt(lengthRanges[i].end) || Number.MAX_VALUE; // 默认为最大值
+                            const rangePrice = parseInt(lengthRanges[i].price) || 0; // 默认为0
+                            
+                            console.log(`Checking range ${i}: start=${startLength}, end=${endLength}, price=${rangePrice}`);
+                            
+                            // 修改这里的条件以包含结束长度
+                            if (fullCornHairLength >= startLength && fullCornHairLength <= endLength) {
+                                price += rangePrice;
+                                console.log('Matched range:', i);
+                                console.log('Updated price:', price);
+                                lengthRangeFound = true;
+                                break; // 一旦找到匹配的区间，退出循环
+                            }
+                        }
+
+                        if (!lengthRangeFound) {
+                            console.log('No matching length range found.');
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // 其他选项的价格计算
+    if (form.querySelector('input[name="flip"]:checked')) {
+        const flipType = form.querySelector('input[name="flipType"]:checked');
+        if (flipType && flipType.value === 'partial') {
+            price += minorStylingPrice;
+        } else if (flipType && flipType.value === 'full') {
+            price += majorStylingPrice;
+        }
+    }
+
+    if (form.querySelector('input[name="seam"]:checked')) {
+        price += sewingPrice;
+    }
+
+    if (form.querySelector('input[name="antiGravity"]:checked')) {
+        const antiGravityRootInput = form.querySelector('input[name="antiGravityRoot"]');
+        const antiGravityRoot = parseInt(antiGravityRootInput.value);
+        if (!isNaN(antiGravityRoot)) {
+            price += antiGravityRoot * microGravityPrice;
+        }
+    }
+
+    if (form.querySelector('input[name="patch"]:checked')) {
+        price += weavePrice;
+    }
+}
+
+// 计算最终价格，包括日期区间的倍数
+const finalPrice = price * selectedMultiplier;
+
+console.log('Final price:', finalPrice);
+resultDiv.textContent = `总价格：${finalPrice}（手工费${price}元+加急费${finalPrice - price}元）`;
+document.querySelector('.note').style.display = 'block';
+
+}
+
+
+  </script>
+</body>
+</html>
