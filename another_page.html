@@ -381,10 +381,10 @@
         }
       }
 
-   function getQueryParam(param) {
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get(param);
-  }
+function getQueryParam(param) {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get(param);
+}
 
 function decodeAndParseQueryParam(paramName) {
   const encodedValue = getQueryParam(paramName);
@@ -400,34 +400,35 @@ function decodeAndParseQueryParam(paramName) {
   }
 }
 
-  // 显示价格和范围的函数
-  function displayPrices() {
-    const defaultPrice = getQueryParam('defaultPrice');
-    const trimmingPrice = getQueryParam('trimmingPrice');
-    const cornrowPrice = getQueryParam('cornrowPrice');
-    const weavePrice = getQueryParam('weavePrice');
-    const sewingPrice = getQueryParam('sewingPrice');
-    const minorStylingPrice = getQueryParam('minorStylingPrice');
-    const majorStylingPrice = getQueryParam('majorStylingPrice');
-    const microGravityPrice = getQueryParam('microGravityPrice');
-    const lengthRanges = JSON.parse(getQueryParam('lengthRanges') || '[]');
-    const expediteRanges = JSON.parse(getQueryParam('expediteRanges') || '[]');
+function displayPrices() {
+  const defaultPrice = parseFloat(getQueryParam('defaultPrice')) || 0;
+  const trimmingPrice = parseFloat(getQueryParam('trimmingPrice')) || 0;
+  const cornrowPrice = parseFloat(getQueryParam('cornrowPrice')) || 0;
+  const weavePrice = parseFloat(getQueryParam('weavePrice')) || 0;
+  const sewingPrice = parseFloat(getQueryParam('sewingPrice')) || 0;
+  const minorStylingPrice = parseFloat(getQueryParam('minorStylingPrice')) || 0;
+  const majorStylingPrice = parseFloat(getQueryParam('majorStylingPrice')) || 0;
+  const microGravityPrice = parseFloat(getQueryParam('microGravityPrice')) || 0;
+  const lengthRanges = decodeAndParseQueryParam('lengthRanges');
+  const expediteRanges = decodeAndParseQueryParam('expediteRanges');
 
-    const prices = {
-      'defaultPrice': parseFloat(defaultPrice) || 0,
-      'trimmingPrice': parseFloat(trimmingPrice) || 0,
-      'cornrowPrice': parseFloat(cornrowPrice) || 0,
-      'weavePrice': parseFloat(weavePrice) || 0,
-      'sewingPrice': parseFloat(sewingPrice) || 0,
-      'minorStylingPrice': parseFloat(minorStylingPrice) || 0,
-      'majorStylingPrice': parseFloat(majorStylingPrice) || 0,
-      'microGravityPrice': parseFloat(microGravityPrice) || 0,
-      'lengthRanges': lengthRanges,
-      'expediteRanges': expediteRanges,
-    };
+  const prices = {
+    defaultPrice,
+    trimmingPrice,
+    cornrowPrice,
+    weavePrice,
+    sewingPrice,
+    minorStylingPrice,
+    majorStylingPrice,
+    microGravityPrice,
+    lengthRanges,
+    expediteRanges,
+  };
 
-    return prices;
-  }
+  console.log('Parsed prices:', prices); // 添加调试输出
+
+  return prices;
+}
 
 
       function calculatePrice() {
