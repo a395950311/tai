@@ -228,7 +228,7 @@
 
 
         <label>
-          <input type="checkbox" name="patch" value="patch"> 仅修剪（单选 勾选后其余选项不可选）
+          <input type="checkbox" name="patch" value="patch"  id="onlyTrim"> 仅修剪（单选 勾选后其余选项不可选）
         <a href="#" class="btn-example show-modal example-btn" data-target="patchModal">示例图（点击查看）</a>
         <label>
           <input type="checkbox" name="corn" value="corn" checked disabled> 需要玉米须
@@ -421,6 +421,55 @@ document.addEventListener('DOMContentLoaded', function() {
     const allCheckboxes = form.querySelectorAll('input[type="checkbox"]');
     const allRadioInputs = form.querySelectorAll('input[type="radio"]');
 
+  const onlyTrimCheckbox = document.getElementById("onlyTrim");
+  const otherCheckboxes = document.querySelectorAll('input[type="checkbox"]:not(#onlyTrim, [name="corn"])');
+  const hairLengthRadio = document.querySelectorAll('input[name="hairLength"]');
+  const cornTypeRadio = document.querySelectorAll('input[name="cornType"]');
+  const fullCornLengthInput = document.querySelector('.full-corn-length-input input');
+  const antiGravityCheckbox = document.querySelector('input[name="antiGravity"]');
+  const antiGravityRootInput = document.querySelector('input[name="antiGravityRoot"]');
+  const cornCheckbox = document.querySelector('input[name="corn"]');
+
+  // 确保需要玉米须复选框默认不可选
+  cornCheckbox.disabled = true;
+
+  // 当仅修剪复选框状态改变时触发
+  onlyTrimCheckbox.addEventListener("change", function () {
+    if (onlyTrimCheckbox.checked) {
+      // 选中仅修剪时禁用其他选项
+      otherCheckboxes.forEach(function (checkbox) {
+        checkbox.disabled = true;
+      });
+      hairLengthRadio.forEach(function (radio) {
+        radio.disabled = true;
+      });
+      cornTypeRadio.forEach(function (radio) {
+        radio.disabled = true;
+      });
+      fullCornLengthInput.disabled = true;
+      antiGravityCheckbox.disabled = true;
+      antiGravityRootInput.disabled = true;
+    } else {
+      // 取消选中仅修剪时启用其他选项
+      otherCheckboxes.forEach(function (checkbox) {
+        checkbox.disabled = false;
+      });
+      hairLengthRadio.forEach(function (radio) {
+        radio.disabled = false;
+      });
+      cornTypeRadio.forEach(function (radio) {
+        radio.disabled = false;
+      });
+      fullCornLengthInput.disabled = false;
+      antiGravityCheckbox.disabled = false;
+      antiGravityRootInput.disabled = false;
+    }
+    // 无论仅修剪是否选中，确保需要玉米须复选框始终不可选
+    cornCheckbox.disabled = true;
+  });
+
+
+
 
 const showSeamModalLink = document.querySelector('.show-seam-modal');
 const seamModal = document.getElementById('seamModal');
@@ -455,28 +504,9 @@ showSeamModalLink.addEventListener('click', function(e) {
   seamModal.style.display = 'block';
 });
 
-    // 添加“仅修剪”复选框状态改变的事件监听器
-    patchCheckbox.addEventListener('change', function() {
-      if (patchCheckbox.checked) {
-        // 如果“仅修剪”被选中，则禁用其他所有复选框和单选按钮
-        allCheckboxes.forEach(checkbox => {
-          if (checkbox !== patchCheckbox) {
-            checkbox.disabled = true;
-          }
-        });
-        allRadioInputs.forEach(radio => {
-          radio.disabled = true;
-        });
-      } else {
-        // 如果“仅修剪”未被选中，则启用其他所有复选框和单选按钮
-        allCheckboxes.forEach(checkbox => {
-          checkbox.disabled = false;
-        });
-        allRadioInputs.forEach(radio => {
-          radio.disabled = false;
-        });
-      }
-    });
+
+
+
   });
     document.addEventListener('DOMContentLoaded', function() {
       form.querySelector('input[name="corn"]').disabled = true;
