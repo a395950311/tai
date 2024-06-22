@@ -24,6 +24,15 @@
     margin-bottom: 20px;
     color: #333;
   }
+.description {
+    text-align: center;
+    margin-bottom: 20px;
+    color: red !important; /* 使用 !important 提高样式优先级 */
+    color: #777;
+    font-size: 16px; /* 设置较小的字体大小，例如 14 像素 */
+    word-wrap: break-word; /* 或者使用 overflow-wrap: break-word; */
+min-height: 40px; /* 设置容器的最小高度为 100 像素，可以根据实际情况调整 */
+}
   form {
     max-width: 500px;
     margin: 0 auto;
@@ -71,6 +80,9 @@
 </head>
 <body>
   <h1>价格输入</h1>
+  <div class="description">
+默认价格里面包含玉米须<br>宝宝们如果想分开来计算的话<br>可以把链接发给单主的时候说明不要玉米须可以便宜多少钱
+  </div>
   <form id="priceForm">
     <label for="defaultPrice">默认价格（仅修剪 包含短发玉米须和造型部分玉米须的价格）：</label>
     <input type="number" id="defaultPrice" name="defaultPrice" required><br><br>
