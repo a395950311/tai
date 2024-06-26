@@ -328,6 +328,63 @@
   </div>
 
   <script>
+
+// JavaScript 中添加万用毛示例图链接的点击事件监听器
+document.addEventListener('DOMContentLoaded', function() {
+  const showUniversalHairModalLink = document.querySelector('.show-universal-hair-modal');
+  const universalHairModal = document.getElementById('universalHairModal');
+  const closeUniversalHairModal = universalHairModal.querySelector('.close');
+
+  showUniversalHairModalLink.addEventListener('click', function(e) {
+    e.preventDefault();
+    universalHairModal.style.display = 'block';
+  });
+
+  closeUniversalHairModal.addEventListener('click', function() {
+    universalHairModal.style.display = 'none';
+  });
+
+  window.addEventListener('click', function(event) {
+    if (event.target === universalHairModal) {
+      universalHairModal.style.display = 'none';
+    }
+  });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+  const form = document.querySelector('form');
+
+  const antiGravityCheckbox = form.querySelector('input[name="antiGravity"]');
+  const antiGravityDetails = document.getElementById('antiGravityDetails');
+
+  antiGravityCheckbox.addEventListener('change', function() {
+    if (antiGravityCheckbox.checked) {
+      antiGravityDetails.style.display = 'inline';
+    } else {
+      antiGravityDetails.style.display = 'none';
+    }
+  });
+
+  const showAntiGravityModalLink = document.querySelector('.show-anti-gravity-modal');
+  const antiGravityModal = document.getElementById('antiGravityModal');
+  const closeAntiGravityModal = antiGravityModal.querySelector('.close');
+
+  showAntiGravityModalLink.addEventListener('click', function(e) {
+    e.preventDefault();
+    antiGravityModal.style.display = 'block';
+  });
+
+  closeAntiGravityModal.addEventListener('click', function() {
+    antiGravityModal.style.display = 'none';
+  });
+
+  window.addEventListener('click', function(event) {
+    if (event.target === antiGravityModal) {
+      antiGravityModal.style.display = 'none';
+    }
+  });
+});
+
  document.addEventListener('DOMContentLoaded', function() {
   const form = document.getElementById('pricingForm');
   const resultDiv = document.getElementById('priceResult');
