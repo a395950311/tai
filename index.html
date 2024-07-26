@@ -434,7 +434,7 @@ document.addEventListener('DOMContentLoaded', function() {
   cornCheckbox.disabled = true;
 
   // 当仅修剪复选框状态改变时触发
-  onlyTrimCheckbox.addEventListener("change", function () {
+  onlyTrimCheckbox.addEventListener("input", function () {
     if (onlyTrimCheckbox.checked) {
       // 选中仅修剪时禁用其他选项
       otherCheckboxes.forEach(function (checkbox) {
@@ -513,7 +513,7 @@ showSeamModalLink.addEventListener('click', function(e) {
       toggleCornDetails();
       toggleFlipDetails();
 
-      form.addEventListener('change', function() {
+      form.addEventListener('input', function() {
         calculatePrice();
         toggleCornDetails();
         toggleFlipDetails();
@@ -585,7 +585,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const antiGravityCheckbox = form.querySelector('input[name="antiGravity"]');
   const antiGravityDetails = document.getElementById('antiGravityDetails');
 
-  antiGravityCheckbox.addEventListener('change', function() {
+  antiGravityCheckbox.addEventListener('input', function() {
     if (antiGravityCheckbox.checked) {
       antiGravityDetails.style.display = 'inline';
     } else {
@@ -702,7 +702,7 @@ const nextMonthFifthDate = new Date(nextMonthYear, nextMonth - 1, 5);
     };
 
     // 月份选择改变时更新日期选择框
-    monthSelect.addEventListener("change", (event) => {
+    monthSelect.addEventListener("input", (event) => {
       const selectedMonth = parseInt(event.target.value);
       initDaySelect(selectedMonth);
     });
