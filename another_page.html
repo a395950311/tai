@@ -357,7 +357,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const antiGravityCheckbox = form.querySelector('input[name="antiGravity"]');
   const antiGravityDetails = document.getElementById('antiGravityDetails');
 
-  antiGravityCheckbox.addEventListener('change', function() {
+  antiGravityCheckbox.addEventListener('input', function() {
     if (antiGravityCheckbox.checked) {
       antiGravityDetails.style.display = 'inline';
     } else {
@@ -410,7 +410,7 @@ document.addEventListener('DOMContentLoaded', function() {
   cornCheckbox.disabled = true;
 
   // 当仅修剪复选框状态改变时触发
-  onlyTrimCheckbox.addEventListener("change", function () {
+  onlyTrimCheckbox.addEventListener("input", function () {
     if (onlyTrimCheckbox.checked) {
       // 选中仅修剪时禁用其他选项
       otherCheckboxes.forEach(function (checkbox) {
@@ -746,7 +746,7 @@ function displayPrices() {
       toggleCornDetails();
       toggleFlipDetails();
 
-      form.addEventListener('change', function() {
+      form.addEventListener('input', function() {
         calculatePrice();
         toggleCornDetails();
         toggleFlipDetails();
@@ -795,7 +795,7 @@ function displayPrices() {
         }
       }
 
-      document.getElementById("monthSelect").addEventListener("change", (event) => {
+      document.getElementById("monthSelect").addEventListener("input", (event) => {
         const selectedMonth = parseInt(event.target.value);
         initDaySelect(selectedMonth);
       });
